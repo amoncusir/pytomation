@@ -1,0 +1,15 @@
+[project]
+name = "pytomation"
+version = "0.0.1"
+description = "An advanced, fully hackable automation library written in Python"
+authors = [{ name="Aran Moncusí Ramírez", email="aran@digitalpoet.info"}]
+requires-python = ">=3.10"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
