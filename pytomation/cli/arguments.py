@@ -5,13 +5,12 @@ from pathlib import Path
 from typing import Callable, Sequence
 
 from pytomation.app import App
-from pytomation.cli.action_command import run_command
+from pytomation.cli.action_command import run
 from pytomation.cli.app_factory import build_from_args
 from pytomation.cli.verify_command import verify_modules
 
 
 def arguments(cwd: PathLike, args: Sequence[str] | None) -> Namespace:
-
     cwd = Path(cwd).resolve() if cwd is not None and Path(cwd).is_dir() else Path.cwd()
 
     parser = argparse.ArgumentParser(description="Local Cluster CLI Tool")
@@ -44,14 +43,11 @@ def arguments(cwd: PathLike, args: Sequence[str] | None) -> Namespace:
         'NOTE: To use the root module path, use "" value',
     )
 
-    parser.add_argument("action", action="store", help="Action to run in module")
-
     parser.add_argument(
-        "module",
+        "action",
         action="store",
-        nargs="?",
-        default="",
-        help="Module path in dot case to run. To default use the root path",
+        nargs="+",
+        help="Action to run in module with format [module]:action [[module]:action]...",
     )
 
     parser.add_argument(
@@ -62,7 +58,7 @@ def arguments(cwd: PathLike, args: Sequence[str] | None) -> Namespace:
         help="Custom parameters to pass to module and action",
     )
 
-    parser.set_defaults(func=run_command)
+    parser.set_defaults(func=run)
 
     namespace, unknown_args = parser.parse_known_args(args)
 
