@@ -2,7 +2,10 @@ from typing import TYPE_CHECKING, List, Dict, Callable, Any
 
 from pytomation.action_inventory import ActionInventory
 from pytomation.context import Context
-from pytomation.errors import RunnerModuleNotFoundError, RunnerActionNotFoundError
+from pytomation.errors import (
+    RunnerModuleNotFoundError,
+    RunnerActionNotFoundError,
+)
 from pytomation.profile import Profile
 from pytomation.plugin import Plugin
 
@@ -14,14 +17,14 @@ if TYPE_CHECKING:
 
 class App:
 
-    discovery: 'Discovery'
+    discovery: "Discovery"
     profiles: List[str]
-    modules: Dict[str, 'Module']
-    module_graph_builder: 'ModuleGraphBuilder'
+    modules: Dict[str, "Module"]
+    module_graph_builder: "ModuleGraphBuilder"
     args: List[str]
     plugins: List[Plugin]
 
-    def __init__(self, discovery: 'Discovery' = None):
+    def __init__(self, discovery: "Discovery" = None):
         self.inventory = ActionInventory()
         self.module_graph_builder = ModuleGraphBuilder()
         self.discovery = discovery
@@ -30,7 +33,7 @@ class App:
         self.args = []
         self.plugins = []
 
-    def build_context(self, module: 'Module'):
+    def build_context(self, module: "Module"):
         profile = Profile(self.profiles)
         plugins = {p.name: p for p in self.plugins}
 
@@ -66,17 +69,17 @@ class App:
     def add_args(self, args: List[str]):
         self.args = args
 
-    def add_plugin(self, name: str, builder: Callable[['Context'], Any]):
+    def add_plugin(self, name: str, builder: Callable[["Context"], Any]):
         if self.plugins is None:
             self.plugins = []
 
         self.plugins.append(Plugin(name, builder))
 
-    def load_module_branch(self, path: str) -> 'Module':
+    def load_module_branch(self, path: str) -> "Module":
         self.validate()
 
         if path not in self.modules:
-            raise RunnerModuleNotFoundError(f'Module {path} not found')
+            raise RunnerModuleNotFoundError(f"Module {path} not found")
 
         module = self.modules[path]
 

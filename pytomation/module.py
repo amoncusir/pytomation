@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 
 
 def is_fn_action(fn):
-    return inspect.isfunction(fn) and hasattr(fn, '__action__')
+    return inspect.isfunction(fn) and hasattr(fn, "__action__")
 
 
 class Module:
@@ -35,7 +35,7 @@ class Module:
         self.actions = {}
 
     def __repr__(self):
-        return f'<lc module;{self.is_executed};{self.name}{self.actions}>'
+        return f"<lc module;{self.is_executed};{self.name}{self.actions}>"
 
     def __contains__(self, item):
         return item in self.actions.keys()
@@ -84,14 +84,16 @@ class Module:
         pass
 
     @abstractmethod
-    def run_action(self, name: str, context: 'Context') -> bool:
+    def run_action(self, name: str, context: "Context") -> bool:
         pass
 
-    def get_file_builder(self) -> 'FileBuilder':
+    def get_file_builder(self) -> "FileBuilder":
         return LocalFileBuilder(self.path)
 
     def run_command(self, *cmd: any, timeout=None, check=True, env=None):
-        return command.run(self.path, *cmd, timeout=timeout, check=check, env=env)
+        return command.run(
+            self.path, *cmd, timeout=timeout, check=check, env=env
+        )
 
     def copy_file(self, src: Path, dst: Path, abs_path=False):
 
@@ -138,23 +140,28 @@ class SourceFileModule(Module):
     def path(self) -> Path:
         if self.module_spec.has_location:
             return Path(os.path.dirname(self.module_spec.origin))
-        raise RuntimeError('Module has not path')
+        raise RuntimeError("Module has not path")
 
     def load(self):
         if self.is_executed:
-            raise RuntimeError('Module already executed')
+            raise RuntimeError("Module already executed")
 
         self.module_spec.loader.exec_module(self.module)
         self.is_executed = True
 
-        self.actions = {fn[0]: FunctionAction(fn[1]) for fn in inspect.getmembers(self.module, is_fn_action)}
+        self.actions = {
+            fn[0]: FunctionAction(fn[1])
+            for fn in inspect.getmembers(self.module, is_fn_action)
+        }
 
-    def run_action(self, name: str, context: 'Context', base_module: Self = None) -> bool:
+    def run_action(
+        self, name: str, context: "Context", base_module: Self = None
+    ) -> bool:
         if not self.is_executed:
             self.load()
 
         if name not in self.actions:
-            print(f'Action {name} not found')
+            print(f"Action {name} not found")
             return False
 
         action = self.actions[name]
@@ -165,6 +172,8 @@ class SourceFileModule(Module):
             action.run(context.extend_from_module(self))
 
         for child in self.sorted_children():
-            child.run_action(name, context, base_module if base_module is not None else self)
+            child.run_action(
+                name, context, base_module if base_module is not None else self
+            )
 
         return True

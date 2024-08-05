@@ -8,11 +8,11 @@ if TYPE_CHECKING:
 class Plugin:
 
     name: str
-    builder: Callable[['Context'], Any]
+    builder: Callable[["Context"], Any]
 
-    def __init__(self, name: str, builder: Callable[['Context'], Any]):
+    def __init__(self, name: str, builder: Callable[["Context"], Any]):
         self.name = name
         self.builder = builder
 
-    def build(self, context: 'Context') -> Any:
+    def build(self, context: "Context") -> Any:
         return self.builder(context)

@@ -12,15 +12,21 @@ class ActionInventory:
         self.log = dict()
         self._counter = 0
 
-    def add_action(self, module: 'Module', action: str, raise_error: bool) -> None:
-        entry = f'{module.name}:{action}'
+    def add_action(
+        self, module: "Module", action: str, raise_error: bool
+    ) -> None:
+        entry = f"{module.name}:{action}"
 
         if raise_error and entry in self.log.keys():
-            print('\n'.join(self.get_sorted_log()))
-            raise ValueError(f'Duplicate log entry: {entry}. Circular dependency detected.')
+            print("\n".join(self.get_sorted_log()))
+            raise ValueError(
+                f"Duplicate log entry: {entry}. Circular dependency detected."
+            )
 
         self.log[entry] = self._counter
         self._counter += 1
 
     def get_sorted_log(self) -> List[str]:
-        return list(map(itemgetter(0), sorted(self.log.items(), key=itemgetter(1))))
+        return list(
+            map(itemgetter(0), sorted(self.log.items(), key=itemgetter(1)))
+        )

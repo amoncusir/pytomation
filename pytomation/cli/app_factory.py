@@ -15,4 +15,3 @@ def build_from_args(args: Namespace) -> App:
     app.add_args(args.options)
 
     return app
-

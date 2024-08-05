@@ -18,14 +18,15 @@ class Context:
     def from_dict(kwargs: Dict):
         return Context(**kwargs)
 
-    def __init__(self,
-                 app: 'App',
-                 profile: 'Profile',
-                 args: List[str],
-                 current_module: 'Module',
-                 plugins: Dict[str, 'Plugin'],
-                 **ignore
-                 ):
+    def __init__(
+        self,
+        app: "App",
+        profile: "Profile",
+        args: List[str],
+        current_module: "Module",
+        plugins: Dict[str, "Plugin"],
+        **ignore,
+    ):
         self.app = app
         self.args = args
         self.profile = profile
@@ -44,7 +45,7 @@ class Context:
     def copy(self):
         return Context.from_dict(self.__dict__)
 
-    def extend_from_module(self, module: 'Module'):
+    def extend_from_module(self, module: "Module"):
         copy = self.copy()
         copy.current_module = module
         return copy

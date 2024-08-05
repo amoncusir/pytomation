@@ -2,10 +2,12 @@ from typing import Sequence, Dict
 
 from pytomation.module import Module
 
-MODULE_PATH_SPLITTER = '/'
+MODULE_PATH_SPLITTER = "/"
 
 
-def find_near_parent(dict_modules: Dict[str, Module], path: Sequence[str]) -> Module:
+def find_near_parent(
+    dict_modules: Dict[str, Module], path: Sequence[str]
+) -> Module:
     len_path = len(path)
 
     for node in reversed(range(len_path)):
@@ -22,7 +24,7 @@ class ModuleGraphBuilder:
 
     def build_graph(self, modules: Sequence[Module]) -> Dict[str, Module]:
         kv_module = {m.name: m for m in modules}
-        without_root = filter(lambda m: m.name != '', modules)
+        without_root = filter(lambda m: m.name != "", modules)
 
         for module in without_root:
             nodes_path = module.name.split(self.module_path_splitter)

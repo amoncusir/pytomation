@@ -10,7 +10,9 @@ from typing import Callable
 class FileBuilder:
 
     @abstractmethod
-    def file(self, name: str, build_hash: str, build_func: Callable[[Path], None]) -> Path:
+    def file(
+        self, name: str, build_hash: str, build_func: Callable[[Path], None]
+    ) -> Path:
         pass
 
     @abstractmethod
@@ -30,27 +32,34 @@ class FileBuilder:
         pass
 
     @abstractmethod
-    def tmp_dir(self) -> 'TmpDirectory':
+    def tmp_dir(self) -> "TmpDirectory":
         pass
 
-    def file_from_template(self, name: str, template: Path | str, build_func: Callable,
-                           template_ctx: any = None) -> Path:
+    def file_from_template(
+        self,
+        name: str,
+        template: Path | str,
+        build_func: Callable,
+        template_ctx: any = None,
+    ) -> Path:
 
         if isinstance(template, str):
             template = self.get_file_path(template)
 
         if not template.is_file():
-            raise FileNotFoundError(f'Template file {template} does not exist')
+            raise FileNotFoundError(f"Template file {template} does not exist")
 
-        with template.open(mode='rb') as f:
-            tmpl_hash = hashlib.file_digest(f, 'md5').hexdigest()
+        with template.open(mode="rb") as f:
+            tmpl_hash = hashlib.file_digest(f, "md5").hexdigest()
 
         if template_ctx is not None:
             json_str = json.dumps(template_ctx)
             ctx_json = hashlib.md5(json_str.encode()).hexdigest()
-            tmpl_hash = f'{tmpl_hash}:{ctx_json}'
+            tmpl_hash = f"{tmpl_hash}:{ctx_json}"
 
-        build_func = functools.partial(build_func, template=template, context=template_ctx)
+        build_func = functools.partial(
+            build_func, template=template, context=template_ctx
+        )
 
         return self.file(name, tmpl_hash, build_func)
 
@@ -63,15 +72,21 @@ class TmpDirectory:
         pass
 
     @abstractmethod
-    def copy(self, src: str, relative_path: str | Path = '.', dest_name: str = None) -> None:
+    def copy(
+        self, src: str, relative_path: str | Path = ".", dest_name: str = None
+    ) -> None:
         pass
 
     @abstractmethod
-    def copy_from_cache(self, name: str, relative_path: str | Path = '.', dest_name: str = None) -> None:
+    def copy_from_cache(
+        self, name: str, relative_path: str | Path = ".", dest_name: str = None
+    ) -> None:
         pass
 
     @abstractmethod
-    def copy_from_module(self, src: str, relative_path: str | Path = '.', dest_name: str = None) -> None:
+    def copy_from_module(
+        self, src: str, relative_path: str | Path = ".", dest_name: str = None
+    ) -> None:
         pass
 
     @abstractmethod

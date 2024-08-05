@@ -7,6 +7,7 @@ class Profile:
     """
     specify a profiles to run
     """
+
     profiles: List[str]
 
     def __contains__(self, item):

@@ -21,29 +21,29 @@ def verify_modules(app: App, args: argparse.Namespace) -> None:
         traceback.print_exc()
         error = str(e)
 
-    execution_msg = 'All modules have been verified'
+    execution_msg = "All modules have been verified"
 
     if error is not None:
-        execution_msg = f'Error: {error}'
+        execution_msg = f"Error: {error}"
 
-    pretty_modules = 'No modules loaded'
+    pretty_modules = "No modules loaded"
 
     if module is not None:
         all_modules = module.deep_children
         all_modules[module.name] = module
 
         pretty_names = []
-        for (name, m) in all_modules.items():
-            name = name if name != '' else '<root>'
-            actions = '|'.join(m.actions)
+        for name, m in all_modules.items():
+            name = name if name != "" else "<root>"
+            actions = "|".join(m.actions)
             docs = m.docs
-            pretty_names.append(f'> {name}[{docs}]: {actions}')
+            pretty_names.append(f"> {name}[{docs}]: {actions}")
 
-        pretty_modules = '\n    '.join(pretty_names)
+        pretty_modules = "\n    ".join(pretty_names)
 
-    module_path_msg = dot_path if dot_path != '' else '<root>'
+    module_path_msg = dot_path if dot_path != "" else "<root>"
 
-    message = f'''
+    message = f"""
     ## Verifying modules ##
     > Active profiles: {app.profiles}
     > Module path: {module_path_msg}
@@ -60,6 +60,6 @@ def verify_modules(app: App, args: argparse.Namespace) -> None:
     :: Loaded Modules
 
     {pretty_modules}
-    '''
+    """
 
     print(textwrap.dedent(message).lstrip())

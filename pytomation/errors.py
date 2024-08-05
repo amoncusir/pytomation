@@ -14,6 +14,8 @@ class RunnerModuleNotFoundError(RunnerError):
 class RunnerActionNotFoundError(RunnerError):
 
     def __init__(self, action: str, module: Module):
-        super().__init__(f'Action "{action}" not found in module "{module.name}"')
+        super().__init__(
+            f'Action "{action}" not found in module "{module.name}"'
+        )
         self.action = action
         self.module = module
