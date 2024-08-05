@@ -6,15 +6,15 @@ import shutil
 from abc import abstractmethod
 from os import PathLike
 from pathlib import Path
-from typing import Iterable, Dict, Optional, List, Self
+from typing import Dict, Iterable, List, Optional, Self
 
-from pytomation.file_builder.local_file_builder import LocalFileBuilder
 from pytomation.action import TYPE_CHECKING, Action, FunctionAction
+from pytomation.file_builder.local_file_builder import LocalFileBuilder
 from pytomation.utils import command
 
 if TYPE_CHECKING:
-    from pytomation.file_builder.file_builder import FileBuilder
     from pytomation.context import Context
+    from pytomation.file_builder.file_builder import FileBuilder
 
 
 def is_fn_action(fn):
@@ -91,9 +91,7 @@ class Module:
         return LocalFileBuilder(self.path)
 
     def run_command(self, *cmd: any, timeout=None, check=True, env=None):
-        return command.run(
-            self.path, *cmd, timeout=timeout, check=check, env=env
-        )
+        return command.run(self.path, *cmd, timeout=timeout, check=check, env=env)
 
     def copy_file(self, src: Path, dst: Path, abs_path=False):
 
@@ -149,14 +147,9 @@ class SourceFileModule(Module):
         self.module_spec.loader.exec_module(self.module)
         self.is_executed = True
 
-        self.actions = {
-            fn[0]: FunctionAction(fn[1])
-            for fn in inspect.getmembers(self.module, is_fn_action)
-        }
+        self.actions = {fn[0]: FunctionAction(fn[1]) for fn in inspect.getmembers(self.module, is_fn_action)}
 
-    def run_action(
-        self, name: str, context: "Context", base_module: Self = None
-    ) -> bool:
+    def run_action(self, name: str, context: "Context", base_module: Self = None) -> bool:
         if not self.is_executed:
             self.load()
 
@@ -172,8 +165,6 @@ class SourceFileModule(Module):
             action.run(context.extend_from_module(self))
 
         for child in self.sorted_children():
-            child.run_action(
-                name, context, base_module if base_module is not None else self
-            )
+            child.run_action(name, context, base_module if base_module is not None else self)
 
         return True

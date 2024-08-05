@@ -2,7 +2,7 @@ import argparse
 from argparse import Namespace
 from os import PathLike
 from pathlib import Path
-from typing import Sequence, Callable
+from typing import Callable, Sequence
 
 from pytomation.app import App
 from pytomation.cli.action_command import run_command
@@ -12,17 +12,11 @@ from pytomation.cli.verify_command import verify_modules
 
 def arguments(cwd: PathLike, args: Sequence[str] | None) -> Namespace:
 
-    cwd = (
-        Path(cwd).resolve()
-        if cwd is not None and Path(cwd).is_dir()
-        else Path.cwd()
-    )
+    cwd = Path(cwd).resolve() if cwd is not None and Path(cwd).is_dir() else Path.cwd()
 
     parser = argparse.ArgumentParser(description="Local Cluster CLI Tool")
 
-    parser.add_argument(
-        "--cwd", action="store", default=cwd, help="Root path to find"
-    )
+    parser.add_argument("--cwd", action="store", default=cwd, help="Root path to find")
 
     parser.add_argument(
         "--module-name",
@@ -50,9 +44,7 @@ def arguments(cwd: PathLike, args: Sequence[str] | None) -> Namespace:
         'NOTE: To use the root module path, use "" value',
     )
 
-    parser.add_argument(
-        "action", action="store", help="Action to run in module"
-    )
+    parser.add_argument("action", action="store", help="Action to run in module")
 
     parser.add_argument(
         "module",

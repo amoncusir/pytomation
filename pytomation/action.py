@@ -1,7 +1,7 @@
 import inspect
 from abc import abstractmethod
 from operator import attrgetter
-from typing import TYPE_CHECKING, Sequence, List
+from typing import TYPE_CHECKING, List, Sequence
 
 from pytomation.action_wrapper.util import safe_call
 
@@ -33,9 +33,7 @@ class FunctionAction(Action):
     def __init__(self, fn: any):
         signature = inspect.signature(fn)
         docs = inspect.getdoc(fn)
-        parameters = list(
-            map(attrgetter("name"), signature.parameters.values())
-        )
+        parameters = list(map(attrgetter("name"), signature.parameters.values()))
 
         super().__init__(fn.__name__, parameters, docs)
         self.fn = fn

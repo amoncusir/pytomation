@@ -1,13 +1,11 @@
-from typing import Sequence, Dict
+from typing import Dict, Sequence
 
 from pytomation.module import Module
 
 MODULE_PATH_SPLITTER = "/"
 
 
-def find_near_parent(
-    dict_modules: Dict[str, Module], path: Sequence[str]
-) -> Module:
+def find_near_parent(dict_modules: Dict[str, Module], path: Sequence[str]) -> Module:
     len_path = len(path)
 
     for node in reversed(range(len_path)):

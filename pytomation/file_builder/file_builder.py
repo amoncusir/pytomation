@@ -10,9 +10,7 @@ from typing import Callable
 class FileBuilder:
 
     @abstractmethod
-    def file(
-        self, name: str, build_hash: str, build_func: Callable[[Path], None]
-    ) -> Path:
+    def file(self, name: str, build_hash: str, build_func: Callable[[Path], None]) -> Path:
         pass
 
     @abstractmethod
@@ -57,9 +55,7 @@ class FileBuilder:
             ctx_json = hashlib.md5(json_str.encode()).hexdigest()
             tmpl_hash = f"{tmpl_hash}:{ctx_json}"
 
-        build_func = functools.partial(
-            build_func, template=template, context=template_ctx
-        )
+        build_func = functools.partial(build_func, template=template, context=template_ctx)
 
         return self.file(name, tmpl_hash, build_func)
 
@@ -72,21 +68,15 @@ class TmpDirectory:
         pass
 
     @abstractmethod
-    def copy(
-        self, src: str, relative_path: str | Path = ".", dest_name: str = None
-    ) -> None:
+    def copy(self, src: str, relative_path: str | Path = ".", dest_name: str = None) -> None:
         pass
 
     @abstractmethod
-    def copy_from_cache(
-        self, name: str, relative_path: str | Path = ".", dest_name: str = None
-    ) -> None:
+    def copy_from_cache(self, name: str, relative_path: str | Path = ".", dest_name: str = None) -> None:
         pass
 
     @abstractmethod
-    def copy_from_module(
-        self, src: str, relative_path: str | Path = ".", dest_name: str = None
-    ) -> None:
+    def copy_from_module(self, src: str, relative_path: str | Path = ".", dest_name: str = None) -> None:
         pass
 
     @abstractmethod

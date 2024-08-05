@@ -24,14 +24,9 @@ class LocalFileBuilder(FileBuilder):
             shutil.rmtree(file)
 
     def exists(self, name: str) -> bool:
-        return (
-            self._get_tmp_file(name).is_dir()
-            and self._get_current_file(name).is_file()
-        )
+        return self._get_tmp_file(name).is_dir() and self._get_current_file(name).is_file()
 
-    def file(
-        self, name: str, build_hash: str, build_func: Callable[[Path], None]
-    ) -> Path:
+    def file(self, name: str, build_hash: str, build_func: Callable[[Path], None]) -> Path:
         file = self._get_tmp_file(name)
         cached_file = file.joinpath(build_hash)
 
@@ -52,9 +47,7 @@ class LocalFileBuilder(FileBuilder):
 
     def tmp_dir(self) -> TmpDirectory:
         random_name = uuid.uuid4().hex
-        return LocalTmpDirectory(
-            self, self.workdir / f"tmp_{random_name}", self.mod_dir
-        )
+        return LocalTmpDirectory(self, self.workdir / f"tmp_{random_name}", self.mod_dir)
 
     def _get_tmp_file(self, name: str):
         file_path = self.workdir.joinpath(name)
@@ -105,9 +98,7 @@ class LocalTmpDirectory(TmpDirectory):
     def path(self) -> Path:
         return self.tmp_dir
 
-    def copy(
-        self, src: str, relative_path: str | Path = ".", dest_name: str = None
-    ) -> None:
+    def copy(self, src: str, relative_path: str | Path = ".", dest_name: str = None) -> None:
         file_src = Path(src)
 
         if not file_src.is_file():
@@ -115,17 +106,13 @@ class LocalTmpDirectory(TmpDirectory):
 
         self._copy_file(file_src, relative_path, (dest_name or file_src.name))
 
-    def copy_from_cache(
-        self, name: str, relative_path: str | Path = ".", dest_name: str = None
-    ) -> None:
+    def copy_from_cache(self, name: str, relative_path: str | Path = ".", dest_name: str = None) -> None:
         org_file = Path(name)
         file = self.file_builder.get_current(name)
 
         self._copy_file(file, relative_path, (dest_name or org_file.name))
 
-    def copy_from_module(
-        self, src: str, relative_path: str | Path = ".", dest_name: str = None
-    ) -> None:
+    def copy_from_module(self, src: str, relative_path: str | Path = ".", dest_name: str = None) -> None:
         file_src = self.module_dir / src
 
         if not file_src.is_file():
@@ -133,9 +120,7 @@ class LocalTmpDirectory(TmpDirectory):
 
         self._copy_file(file_src, relative_path, (dest_name or file_src.name))
 
-    def _copy_file(
-        self, src: Path, relative_path: str | Path, dest_name: str
-    ) -> None:
+    def _copy_file(self, src: Path, relative_path: str | Path, dest_name: str) -> None:
         dest = self.tmp_dir / relative_path / dest_name
         dir_dest = dest.parent
 

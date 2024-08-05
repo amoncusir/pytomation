@@ -1,6 +1,7 @@
 import functools
 
-from pytomation.action_wrapper.util import safe_call, get_context
+from pytomation.action_wrapper.util import get_context, safe_call
+
 from .executor import depends_on_executor
 
 

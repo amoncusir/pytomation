@@ -11,11 +11,7 @@ def safe_call(func, *args, **kwargs):
 
     fn_args = {}
 
-    for param in (
-        param
-        for param in parameters
-        if param.kind in (param.POSITIONAL_OR_KEYWORD, param.KEYWORD_ONLY)
-    ):
+    for param in (param for param in parameters if param.kind in (param.POSITIONAL_OR_KEYWORD, param.KEYWORD_ONLY)):
         if param.name not in kwargs:
             raise ValueError(f"Unrecognized parameter: {param.name}")
 

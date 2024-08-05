@@ -1,15 +1,15 @@
 from pathlib import Path
-from typing import List, Dict, TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Dict, List
 
 from pytomation.file_builder.file_builder import FileBuilder
 from pytomation.file_builder.local_file_builder import LocalFileBuilder
 from pytomation.utils import command
 
 if TYPE_CHECKING:
-    from pytomation.module import Module
-    from pytomation.profile import Profile
     from pytomation.app import App
+    from pytomation.module import Module
     from pytomation.plugin import Plugin
+    from pytomation.profile import Profile
 
 
 class Context:
