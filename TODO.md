@@ -7,3 +7,4 @@
 - [ ] CI running tests
 - [ ] Update CLI arguments to enable multiple commands in one call
 - [X] Add pre-commit actions to lint and format code
+- [ ] Add verbose parameter
