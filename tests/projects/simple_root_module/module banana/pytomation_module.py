@@ -1,3 +1,5 @@
+import sys
+
 from pytomation.action_metadata import action
 
 
@@ -12,4 +14,4 @@ def banana():
 
 
 def send_echo_test():
-    print("banana")
+    sys.stderr.write("banana")
