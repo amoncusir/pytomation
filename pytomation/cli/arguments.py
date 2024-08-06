@@ -1,5 +1,7 @@
 import argparse
+import logging
 from argparse import Namespace
+from dataclasses import dataclass, field
 from os import PathLike
 from pathlib import Path
 from typing import Callable, Sequence
@@ -10,17 +12,36 @@ from pytomation.cli.app_factory import build_from_args
 from pytomation.cli.verify_command import verify_modules
 
 
-def arguments(cwd: PathLike, args: Sequence[str] | None) -> Namespace:
-    cwd = Path(cwd).resolve() if cwd is not None and Path(cwd).is_dir() else Path.cwd()
+@dataclass(frozen=True)
+class Options:
+
+    _cwd: PathLike | None = field(default=None)
+    module_name: str = field(default="pytomation.py")
+    verbosity: int = field(default=0)
+
+    @property
+    def cwd(self) -> Path:
+        return Path(self._cwd).resolve() if self._cwd is not None and Path(self._cwd).is_dir() else Path.cwd()
+
+    @staticmethod
+    def default() -> "Options":
+        return Options()
+
+
+def arguments(options: Options, args: Sequence[str] | None) -> Namespace:
+    cwd = options.cwd
+    # cwd = Path(cwd).resolve() if cwd is not None and Path(cwd).is_dir() else Path.cwd()
 
     parser = argparse.ArgumentParser(description="Local Cluster CLI Tool")
 
     parser.add_argument("--cwd", action="store", default=cwd, help="Root path to find")
 
+    parser.add_argument("--verbose", "-v", action="count", default=options.verbosity)
+
     parser.add_argument(
         "--module-name",
         action="store",
-        default="lc.module.py",
+        default=options.module_name,
         help="module name to find",
     )
 
@@ -67,12 +88,21 @@ def arguments(cwd: PathLike, args: Sequence[str] | None) -> Namespace:
     return namespace
 
 
+def set_verbosity(level: int):
+    fix_level = (5 - level) * 10
+    logging.getLogger().setLevel(fix_level)
+    logging.info(f"Log level {logging.getLevelName(fix_level)}")
+
+
 def main(
-    cwd: PathLike = None,
     args: Sequence[str] = None,
+    options: Options = Options.default(),
     app_inspect: Callable[[App], None] = None,
 ) -> int:
-    args = arguments(cwd, args)
+
+    args = arguments(options, args)
+
+    set_verbosity(args.verbose)
 
     if len(args.profiles) == 0:
         args.profiles.append("test")
