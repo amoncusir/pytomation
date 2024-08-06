@@ -13,6 +13,12 @@ requires-python = ">=3.12"
 [tool.poetry.dependencies]
 python = "^3.12"
 
+[tool.poetry.group.test]
+[tool.poetry.group.test.dependencies]
+pytest = "8.3.2"
+cli_test_helpers = "4.0.0"
+click = "8.1.7"
+
 [tool.poetry.group.dev]
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.8.0"
@@ -20,6 +26,10 @@ pre-commit = "^3.8.0"
 [build-system]
 requires = ["poetry-core>=1.8.3"]
 build-backend = "poetry.core.masonry.api"
+
+[pytest]
+log_cli = true
+log_cli_level = "DEBUG"
 
 [tool.black]
 line-length = 120
