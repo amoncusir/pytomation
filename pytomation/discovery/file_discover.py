@@ -1,3 +1,4 @@
+import logging
 import os
 import os.path
 from os import PathLike
@@ -13,21 +14,26 @@ if TYPE_CHECKING:
 
 class FileDiscovery(Discovery):
 
-    def __init__(self, cwd: PathLike, module_file_name: str):
+    def __init__(self, workdir: PathLike, module_file_name: str):
 
         self.module_file_name = module_file_name
-        self.cwd = cwd
+        self.workdir = Path(workdir)
 
     def find_modules(self) -> List["Module"]:
         paths = self.find_all_modules_path()
         return [self.create_module_from_path(path) for path in paths]
 
     def find_all_modules_path(self) -> List[Path]:
-        workdir = Path(os.path.dirname(self.cwd))
-        return [path for path in workdir.rglob(self.module_file_name)]
+        logging.debug(f"Finding all modules in {self.workdir} like {self.module_file_name}")
+
+        modules_path_list = [path for path in self.workdir.rglob(self.module_file_name)]
+
+        logging.debug(f"Found {len(modules_path_list)} modules in {self.workdir} :: %s", modules_path_list)
+
+        return modules_path_list
 
     def get_module_name(self, path: PathLike) -> str:
-        return str(path).replace(str(self.cwd), "").replace(self.module_file_name, "").strip(os.sep)
+        return str(path).replace(str(self.workdir), "").replace(self.module_file_name, "").strip(os.sep)
 
     def create_module_from_path(self, path: Path) -> SourceFileModule:
         module_name = self.get_module_name(path)
