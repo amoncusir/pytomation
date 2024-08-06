@@ -39,6 +39,8 @@ class App:
 
     def validate(self):
 
+        logging.debug(f"Validating; modules={self.modules}; profiles={self.profiles}")
+
         if self.modules is None or len(self.modules) <= 0:
             raise ValueError("No modules specified")
 
