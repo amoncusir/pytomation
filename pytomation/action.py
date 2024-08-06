@@ -1,4 +1,5 @@
 import inspect
+import logging
 from abc import abstractmethod
 from operator import attrgetter
 from typing import TYPE_CHECKING, List, Sequence
@@ -16,9 +17,12 @@ class Action:
     docs: str
 
     def __init__(self, name: str, parameters: List[str], docs: str):
+        self._logger = logging.getLogger(self.__class__.__name__)
         self.name = name
         self.parameters = parameters
         self.docs = docs
+
+        self._logger.debug(f"Action <{name}> initialized")
 
     def __repr__(self):
         return f"<Action {self.name}: {self.docs}>"
@@ -40,6 +44,8 @@ class FunctionAction(Action):
         self.fn_parameters = signature.parameters
 
     def run(self, context: "Context"):
+        self._logger.debug(f"Running action: {self.name}")
+        self._logger.debug("\tWith context: %s", context)
 
         safe_call(self.fn, context=context, **context.__dict__)
 
