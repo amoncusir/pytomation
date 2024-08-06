@@ -1,15 +1,16 @@
+import logging
 from typing import TYPE_CHECKING, Any, Callable, Dict, List
 
 from pytomation.action_inventory import ActionInventory
 from pytomation.context import Context
 from pytomation.errors import RunnerActionNotFoundError, RunnerModuleNotFoundError
+from pytomation.module_graph import ModuleGraphBuilder
 from pytomation.plugin import Plugin
 from pytomation.profile import Profile
 
 if TYPE_CHECKING:
     from pytomation.discovery import Discovery
     from pytomation.module import Module
-    from pytomation.module_graph import ModuleGraphBuilder
 
 
 class App:
