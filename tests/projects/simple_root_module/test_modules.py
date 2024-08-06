@@ -5,9 +5,8 @@ from pytomation.cli.arguments import Options
 
 
 def main_cli(*args: str):
-    options = Options(
-        _cwd=Path.cwd() / "tests/projects/root_based_module", module_name="pytomation_module.py", verbosity=5
-    )
+    path = Path(__file__).parent.resolve()
+    options = Options(_cwd=path, module_name="pytomation_module.py", verbosity=5)
 
     cli.main(args, options)
 
@@ -37,3 +36,12 @@ def test_banana_module(capsys):
     captured = capsys.readouterr()
 
     assert captured.err == "banana", "Banana module not wrote the word <banana> on the standard error output"
+
+
+def test_spread_task_propagate(capsys):
+
+    main_cli(":spread_action")
+
+    captured = capsys.readouterr()
+
+    assert captured.err == "rootbananaapple", "The modules didn't propagate the action or ran in bad order"
