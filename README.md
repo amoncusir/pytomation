@@ -19,17 +19,36 @@ And, of course, it's built with non-Python projects in mind.
 
 ### None-Python project
 
-Easy; Install python (up to 3.10) and create a project, after, follow the next step. It should always be installed in a
-virtual environment!
+Currently only recommend the installation using a python project definition. To achieve, create a project using as
+example, poetry and add it as a dependency.  
 
 ### Python project
 
 Just add in your dependency descriptor:
 
-```text
-pytomation
+> Recommend to install as a development dependency in a virtual environment
+
+```toml
+[tool.poetry.group.dev]
+[tool.poetry.group.dev.dependencies]
+pytomation = "^1.0.0"
 ```
 
 ## Example
 
 Check repo: 
+
+## Contribute
+
+### Dependencies
+
+- [Poetry](https://python-poetry.org/)
+- [PyEnv](https://github.com/pyenv/pyenv)
+
+### Set up
+
+1. Install python using pyenv (can omit this step in CI environments installing the right py version): `pyenv install`
+2. Init poetry: `poetry install`
+3. Install pre-commit: `pre-commit install` (inside poetry virtual env)
+4. Run pre-commit: `pre-commit run --all-files`
+5. Ready!
