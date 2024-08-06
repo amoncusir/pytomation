@@ -7,9 +7,6 @@ if TYPE_CHECKING:
 
 def extract_module_and_action(qualified_action_path, module: "Module") -> Tuple[str, str]:
     if ":" not in qualified_action_path:
-        raise ValueError(f"Invalid qualified action path: {qualified_action_path}")
-
-    if qualified_action_path.startswith(":"):
         return module.name, qualified_action_path[1:]
 
     return qualified_action_path.rsplit(":")
