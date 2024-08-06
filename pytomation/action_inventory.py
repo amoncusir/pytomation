@@ -6,6 +6,9 @@ if TYPE_CHECKING:
     from pytomation.module import Module
 
 
+# TODO: Improve data structures!
+#  use a hash table to keep a register on all called actions
+#  use a list to keep the order for all calls and return itself
 class ActionInventory:
     log: Dict[str, int]
 
