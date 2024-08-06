@@ -1,9 +1,12 @@
 import argparse
+import logging
 from typing import List, Tuple
 
 from pytomation.app import App
 from pytomation.errors import RunnerActionNotFoundError
 from pytomation.module import Module
+
+__logger__ = logging.getLogger(__name__)
 
 
 def run(app: App, args: argparse.Namespace) -> None:
@@ -11,8 +14,9 @@ def run(app: App, args: argparse.Namespace) -> None:
 
     app.find()
 
-    for action in actions:
-        action, module = action
+    for group in actions:
+        module, action = group
+        logging.debug(f"action: {action}, module: {module}")
         run_command(app, action, module)
 
 
