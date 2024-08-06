@@ -1,3 +1,4 @@
+import logging
 from typing import Dict, Sequence
 
 from pytomation.module import Module
@@ -29,5 +30,7 @@ class ModuleGraphBuilder:
             parent = find_near_parent(kv_module, nodes_path)
             parent.append_child(module)
             module.parent = parent
+
+        logging.debug(f"Module graph finished. path splitter: {self.module_path_splitter} :: %s", kv_module)
 
         return kv_module

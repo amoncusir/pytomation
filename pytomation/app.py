@@ -22,7 +22,7 @@ class App:
     args: List[str]
     plugins: List[Plugin]
 
-    def __init__(self, discovery: "Discovery" = None):
+    def __init__(self, discovery: "Discovery"):
         self.inventory = ActionInventory()
         self.module_graph_builder = ModuleGraphBuilder()
         self.discovery = discovery
@@ -49,52 +49,69 @@ class App:
 
     def find(self):
         if self.discovery is None:
+            logging.error("discovery property must be defined")
             raise ValueError("No discovery specified")
 
         modules = self.discovery.find_modules()
         self.modules = self.module_graph_builder.build_graph(modules)
 
     def add_profile(self, profile: str):
+        logging.debug(f"Adding profile: {profile}")
+
         if self.profiles is None:
             self.profiles = []
 
         self.profiles.append(profile)
 
     def add_profiles(self, profiles: List[str]):
+        logging.debug(f"Adding profiles: {profiles}")
+
         if self.profiles is None:
             self.profiles = []
 
         self.profiles.extend(profiles)
 
     def add_args(self, args: List[str]):
+        logging.debug(f"Adding args: {args}")
+
         self.args = args
 
     def add_plugin(self, name: str, builder: Callable[["Context"], Any]):
+        logging.debug(f"Adding plugin: {name}")
+
         if self.plugins is None:
             self.plugins = []
 
         self.plugins.append(Plugin(name, builder))
 
     def load_module_branch(self, path: str) -> "Module":
+        logging.debug(f"Loading module: {path}")
+
         self.validate()
 
         if path not in self.modules:
+            logging.error(f"Module {path} not found")
             raise RunnerModuleNotFoundError(f"Module {path} not found")
 
         module = self.modules[path]
 
         if module is None:
+            logging.error(f"Module {path} is not defined")
             raise RunnerModuleNotFoundError(path)
 
         if not module.is_executed:
+            logging.debug(f"Loading module {module.name}")
             module.load()
 
         return module
 
     def run_action_on_module(self, dot_path: str, action: str, safe=True):
+        logging.debug(f"Running action on module: {dot_path}")
+
         module = self.load_module_branch(dot_path)
 
         if action not in module:
+            logging.error(f"Action {action} on module {module.name} not defined")
             raise RunnerActionNotFoundError(action, module)
 
         self.inventory.add_action(module, action, raise_error=safe)

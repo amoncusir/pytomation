@@ -1,3 +1,4 @@
+import logging
 from typing import TYPE_CHECKING, Dict, List
 
 from _operator import itemgetter
@@ -17,10 +18,17 @@ class ActionInventory:
         self._counter = 0
 
     def add_action(self, module: "Module", action: str, raise_error: bool) -> None:
+
         entry = f"{module.name}:{action}"
 
+        if not raise_error:
+            logging.warning(f"Running action <{entry}> without circular dependency check enabled!")
+
+        logging.info(f"Running {entry}")
+
         if raise_error and entry in self.log.keys():
-            print("\n".join(self.get_sorted_log()))
+            logging.error(f"Action {entry} already registered and marked to raise error")
+            logging.error("\n".join(self.get_sorted_log()))
             raise ValueError(f"Duplicate log entry: {entry}. Circular dependency detected.")
 
         self.log[entry] = self._counter

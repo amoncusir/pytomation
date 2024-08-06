@@ -1,6 +1,7 @@
 import functools
 import importlib.util
 import inspect
+import logging
 import os.path
 import shutil
 from abc import abstractmethod
@@ -29,6 +30,7 @@ class Module:
     parent: Optional[Self]
 
     def __init__(self):
+        self._logger = logging.getLogger(self.__class__.__name__)
         self.is_executed = False
         self.parent = None
         self.children = []
@@ -91,12 +93,15 @@ class Module:
         return LocalFileBuilder(self.path)
 
     def run_command(self, *cmd: any, timeout=None, check=True, env=None):
+        self._logger.debug(f"Running command: %s, {timeout}, {check}, %s", cmd, env)
         return command.run(self.path, *cmd, timeout=timeout, check=check, env=env)
 
     def copy_file(self, src: Path, dst: Path, abs_path=False):
 
         src = self.path / src
         dst = dst if abs_path else self.path / dst
+
+        self._logger.debug(f"Copying {src} to {dst}")
 
         shutil.copyfile(str(src), str(dst))
 
@@ -123,6 +128,8 @@ class SourceFileModule(Module):
         self.module_spec = module_spec
         self.module = module
 
+        self._logger.debug(f"Module <{self.name}> initialized")
+
     @property
     def name(self) -> str:
         return self.module_spec.name
@@ -141,20 +148,26 @@ class SourceFileModule(Module):
         raise RuntimeError("Module has not path")
 
     def load(self):
+        self._logger.debug(f"Loading {self.name}")
+
         if self.is_executed:
+            self._logger.error("Module already executed")
             raise RuntimeError("Module already executed")
 
         self.module_spec.loader.exec_module(self.module)
         self.is_executed = True
 
         self.actions = {fn[0]: FunctionAction(fn[1]) for fn in inspect.getmembers(self.module, is_fn_action)}
+        self._logger.debug(f"Loaded {self.name} with actions: {self.actions}")
 
     def run_action(self, name: str, context: "Context", base_module: Self = None) -> bool:
+        self._logger.debug(f"Running action {name} with context: %s extended by {base_module}", context)
+
         if not self.is_executed:
             self.load()
 
         if name not in self.actions:
-            print(f"Action {name} not found")
+            self._logger.warning(f"Action {name} not found")
             return False
 
         action = self.actions[name]

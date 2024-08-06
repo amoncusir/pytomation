@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Dict, List
 
@@ -51,10 +52,12 @@ class Context:
         return copy
 
     def run_command(self, *cmd: any, timeout=None, check=True):
+        logging.debug(f"Running command: %s, {timeout}, {check}", cmd)
         return command.run(self.path, *cmd, timeout=timeout, check=check)
 
-    def run_action_on_module(self, dot_path: str, action: str):
-        self.app.run_action_on_module(dot_path, action)
+    def run_action_on_module(self, module_path: str, action: str):
+        logging.debug(f"Running action on module: {module_path}:{action}")
+        self.app.run_action_on_module(module_path, action)
 
     def get_file_builder(self) -> FileBuilder:
         return LocalFileBuilder(self.path)
