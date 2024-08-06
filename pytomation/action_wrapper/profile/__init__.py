@@ -11,6 +11,8 @@ def profile(with_profiles: List[str] = None, without_profiles: List[str] = None)
 
     if with_profiles is None and without_profiles is None:
         raise ValueError("One of with_profiles or without_profiles must be specified")
+
+    # TODO: Will update the logic process to accept with and without profiles in executions on next releases
     if with_profiles is not None and without_profiles is not None:
         raise ValueError("Only one of with_profiles or without_profiles must be specified")
 
