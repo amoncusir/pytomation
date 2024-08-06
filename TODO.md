@@ -3,8 +3,8 @@
 
 # Release 0.1.0 - WIP #
 
-- [ ] Unit testing for each component
-- [ ] CI running tests
-- [ ] Update CLI arguments to enable multiple commands in one call
+- [ ] Generic integration and fuzzy testing
+- [X] Update CLI arguments to enable multiple commands in one call
 - [X] Add pre-commit actions to lint and format code
-- [ ] Add verbose parameter
+- [X] Add verbose parameter
+- [ ] CI running tests
