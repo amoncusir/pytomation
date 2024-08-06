@@ -14,6 +14,7 @@ if TYPE_CHECKING:
 class FileDiscovery(Discovery):
 
     def __init__(self, cwd: PathLike, module_file_name: str):
+
         self.module_file_name = module_file_name
         self.cwd = cwd
 
