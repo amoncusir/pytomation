@@ -4,6 +4,9 @@ from pytomation.action_wrapper.util import get_context, safe_call
 
 from .executor import depends_on_executor
 
+# TODO: It works, but no in a right way! Consider new approaches to call actions using some stack or funcy structure...
+# What a shame!
+
 
 def run_before(qualified_action_path: str):
 

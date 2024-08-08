@@ -13,6 +13,7 @@ if TYPE_CHECKING:
     from pytomation.module import Module
 
 
+# TODO: Useless principal app class. I can do it better...
 class App:
 
     discovery: "Discovery"

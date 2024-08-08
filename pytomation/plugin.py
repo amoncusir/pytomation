@@ -4,6 +4,7 @@ if TYPE_CHECKING:
     from pytomation.context import Context
 
 
+# TODO: Insufficient plugin management, needs a good refactor
 class Plugin:
 
     name: str

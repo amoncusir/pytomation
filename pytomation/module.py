@@ -23,6 +23,7 @@ def is_fn_action(fn):
     return inspect.isfunction(fn) and hasattr(fn, "__action__")
 
 
+# TODO: Due to the growth of the complex, it needs a root manager to act as facade and delegate complex graph logic
 class Module:
 
     is_executed: bool
@@ -161,6 +162,7 @@ class SourceFileModule(Module):
         self.actions = {fn[0]: FunctionAction(fn[1]) for fn in inspect.getmembers(self.module, is_fn_action)}
         self._logger.debug(f"Loaded {self.name} with actions: {self.actions}")
 
+    # TODO: Too many responsibility, broke SOLID, needs a refactor!
     def run_action(self, name: str, context: "Context", base_module: Self = None, optional: bool = False) -> bool:
         self._logger.debug(f"Running action {name} with context: %s extended by {base_module}", context)
 

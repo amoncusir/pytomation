@@ -2,6 +2,9 @@ import inspect
 
 
 def safe_call(func, *args, **kwargs):
+    """
+    This fn is one of my recurrent nightmares
+    """
 
     if is_wrapped(func):
         return func(*args, **kwargs)
