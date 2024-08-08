@@ -13,6 +13,7 @@ if TYPE_CHECKING:
     from pytomation.profile import Profile
 
 
+# TODO: Context with no sense! Please, make a twist and fix this mess!
 class Context:
 
     @staticmethod
