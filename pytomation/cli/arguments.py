@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Callable, Sequence
 
 from pytomation.app import App
-from pytomation.cli.action_command import run
+from pytomation.cli.action_command import initialize
 from pytomation.cli.app_factory import build_from_args
 from pytomation.cli.verify_command import verify_modules
 
@@ -78,7 +78,7 @@ def arguments(options: Options, args: Sequence[str] | None) -> Namespace:
         help="Custom parameters to pass to module and action",
     )
 
-    parser.set_defaults(func=run)
+    parser.set_defaults(func=initialize)
 
     namespace, unknown_args = parser.parse_known_args(args)
 
@@ -93,7 +93,7 @@ def set_verbosity(level: int):
     logging.info(f"Log level {logging.getLevelName(fix_level)}")
 
 
-def main(
+def run(
     args: Sequence[str] = None,
     options: Options = Options.default(),
     app_inspect: Callable[[App], None] = None,
@@ -114,7 +114,3 @@ def main(
     args.func(app, args)
 
     return 0
-
-
-if __name__ == "__main__":
-    main()

@@ -1,1 +1,1 @@
-from .arguments import main
+from .arguments import run

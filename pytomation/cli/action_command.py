@@ -9,7 +9,7 @@ from pytomation.module import Module
 __logger__ = logging.getLogger(__name__)
 
 
-def run(app: App, args: argparse.Namespace) -> None:
+def initialize(app: App, args: argparse.Namespace) -> None:
     actions = get_module_with_action(args)
 
     app.find()
