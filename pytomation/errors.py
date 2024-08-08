@@ -1,4 +1,7 @@
-from pytomation.module import Module
+from pytomation.action import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from pytomation.module import Module
 
 
 class RunnerError(Exception):
@@ -13,7 +16,7 @@ class RunnerModuleNotFoundError(RunnerError):
 
 class RunnerActionNotFoundError(RunnerError):
 
-    def __init__(self, action: str, module: Module):
+    def __init__(self, action: str, module: "Module"):
         super().__init__(f'Action "{action}" not found in module "{module.name}"')
         self.action = action
         self.module = module

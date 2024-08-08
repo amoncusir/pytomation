@@ -85,33 +85,33 @@ class App:
         self.plugins.append(Plugin(name, builder))
 
     def load_module_branch(self, path: str) -> "Module":
-        logging.debug(f"Loading module: {path}")
+        logging.debug(f"Loading module: <{path}>")
 
         self.validate()
 
         if path not in self.modules:
-            logging.error(f"Module {path} not found")
-            raise RunnerModuleNotFoundError(f"Module {path} not found")
+            logging.error(f"Module <{path}> not found")
+            raise RunnerModuleNotFoundError(f"Module <{path}> not found")
 
         module = self.modules[path]
 
         if module is None:
-            logging.error(f"Module {path} is not defined")
+            logging.error(f"Module <{path}> is not defined")
             raise RunnerModuleNotFoundError(path)
 
         if not module.is_executed:
-            logging.debug(f"Loading module {module.name}")
+            logging.debug(f"Loading module <{module.name}>")
             module.load()
 
         return module
 
     def run_action_on_module(self, dot_path: str, action: str, safe=True):
-        logging.debug(f"Running action on module: {dot_path}")
+        logging.debug(f"Running action on module: <{dot_path}>")
 
         module = self.load_module_branch(dot_path)
 
         if action not in module:
-            logging.error(f"Action {action} on module {module.name} not defined")
+            logging.error(f"Action <{action}> on module <{module.name}> not defined")
             raise RunnerActionNotFoundError(action, module)
 
         self.inventory.add_action(module, action, raise_error=safe)
