@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Self
 
 from pytomation.action import TYPE_CHECKING, Action, FunctionAction
+from pytomation.errors import RunnerActionNotFoundError
 from pytomation.file_builder.local_file_builder import LocalFileBuilder
 from pytomation.utils import command
 
@@ -160,14 +161,17 @@ class SourceFileModule(Module):
         self.actions = {fn[0]: FunctionAction(fn[1]) for fn in inspect.getmembers(self.module, is_fn_action)}
         self._logger.debug(f"Loaded {self.name} with actions: {self.actions}")
 
-    def run_action(self, name: str, context: "Context", base_module: Self = None) -> bool:
+    def run_action(self, name: str, context: "Context", base_module: Self = None, optional: bool = False) -> bool:
         self._logger.debug(f"Running action {name} with context: %s extended by {base_module}", context)
 
         if not self.is_executed:
             self.load()
 
         if name not in self.actions:
-            self._logger.warning(f"Action {name} not found")
+            if not optional:
+                self._logger.warning(f"Action {name} not found")
+                raise RunnerActionNotFoundError(name, self)
+
             return False
 
         action = self.actions[name]
@@ -178,6 +182,6 @@ class SourceFileModule(Module):
             action.run(context.extend_from_module(self))
 
         for child in self.sorted_children():
-            child.run_action(name, context, base_module if base_module is not None else self)
+            child.run_action(name, context, base_module if base_module is not None else self, True)
 
         return True
