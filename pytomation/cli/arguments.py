@@ -30,7 +30,6 @@ class Options:
 
 def arguments(options: Options, args: Sequence[str] | None) -> Namespace:
     cwd = options.cwd
-    # cwd = Path(cwd).resolve() if cwd is not None and Path(cwd).is_dir() else Path.cwd()
 
     parser = argparse.ArgumentParser(description="Local Cluster CLI Tool")
 
