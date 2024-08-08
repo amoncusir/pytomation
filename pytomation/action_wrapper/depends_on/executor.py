@@ -7,7 +7,7 @@ if TYPE_CHECKING:
 
 def extract_module_and_action(qualified_action_path, module: "Module") -> Tuple[str, str]:
     if ":" not in qualified_action_path:
-        return module.name, qualified_action_path[1:]
+        return module.name, qualified_action_path
 
     return qualified_action_path.rsplit(":")
 

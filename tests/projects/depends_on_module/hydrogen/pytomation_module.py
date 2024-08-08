@@ -14,3 +14,9 @@ def molecule_h():
 @action()
 def experiment():
     sys.stderr.write("hydrogen")
+
+
+@action()
+@depends_on.run_before("molecule_h")
+def print_name():
+    pass
