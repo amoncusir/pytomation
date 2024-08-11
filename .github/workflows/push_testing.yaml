@@ -6,7 +6,7 @@ jobs:
     name: Unprocessed jon only to define a yaml merge key
     runs-on: ubuntu-latest
     if: ${{ false }}
-    steps: &common_steps:
+    steps: &common_steps
     - uses: actions/checkout@v4
     - uses: actions/setup-python@v5
       with:
