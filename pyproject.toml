@@ -1,5 +1,8 @@
 [tool.poetry]
 package-mode = true
+packages = [
+    { include = "pytomation" }
+]
 name = "pytomation"
 version = "0.0.1"
 description = "An advanced, fully hackable automation library written in Python"
@@ -16,8 +19,6 @@ python = "^3.12"
 [tool.poetry.group.test]
 [tool.poetry.group.test.dependencies]
 pytest = "8.3.2"
-cli_test_helpers = "4.0.0"
-click = "8.1.7"
 
 [tool.poetry.group.dev]
 [tool.poetry.group.dev.dependencies]
