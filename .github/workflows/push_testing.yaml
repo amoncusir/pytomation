@@ -19,7 +19,5 @@ jobs:
       - name: Install
         run: poetry install --with test --no-interaction --no-root
         if: steps.poetry-cache.outputs.cache-hit != 'true'
-      - name: Run CLI tests
-        run: poetry run pytest tests/cli/
-      - name: Run Project tests
-        run: poetry run pytest tests/projects/
+      - name: Run tests
+        run: poetry run pytest tests/
