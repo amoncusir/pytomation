@@ -1,7 +1,7 @@
-# Release 0.1.1 - TBD #
+# Release 0.1.1 - WIP #
 - [ ] Deploy artifact to `test.pip` python package 
 
-# Release 0.1.0 - WIP #
+# Release 0.1.0 - DONE #
 
 - [X] Generic integration and light testing
 - [X] Update CLI arguments to enable multiple commands in one call
