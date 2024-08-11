@@ -1,3 +1,6 @@
+# Release 0.1.2 - TBD #
+- [] Deploy to GitHub packages
+
 # Release 0.1.1 - WIP #
 - [ ] Deploy artifact to `test.pip` python package 
 
