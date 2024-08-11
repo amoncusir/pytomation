@@ -1,28 +1,32 @@
+---
+.common_steps: &common_steps:
+  - uses: actions/checkout@v4
+  - uses: actions/setup-python@v5
+    with:
+      python-version-file: '.python-version'
+  - name: Install poetry
+    run: pipx install poetry==1.8.3
+  - name: Install dependencies from cache
+    id: poetry-cache
+    uses: actions/cache@v3
+    with:
+      path: .venv
+      key: poetry-ci-dependencies-${{ hashFiles('**/poetry.lock') }}
+
+  - name: Install
+    run: poetry install --no-interaction --no-root
+    if: steps.poetry-cache.outputs.cache-hit != 'true'
+
 name: "Push actions"
 on: push
 jobs:
   Lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version-file: '.python-version'
-      - name: Install poetry
-        run: pipx install poetry==1.8.3
-      - name: Install dependencies from cache
-        id: poetry-cache
-        uses: actions/cache@v3
-        with:
-          path: .venv
-          key: poetry-ci-dependencies-${{ hashFiles('**/poetry.lock') }}
-
-      - name: Install
-        run: poetry install --no-interaction --no-root
-        if: steps.poetry-cache.outputs.cache-hit != 'true'
+      - <: *common_steps
 
       - name: SetUp pre-commit env from cache
-        id: poetry-cache
+        id: pre-commit-cache
         uses: actions/cache@v3
         with:
           path: ~/.cache/pre-commit
@@ -34,21 +38,7 @@ jobs:
   Test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version-file: '.python-version'
-      - name: Install poetry
-        run: pipx install poetry==1.8.3
-      - name: Install dependencies from cache
-        id: poetry-cache
-        uses: actions/cache@v3
-        with:
-          path: .venv
-          key: poetry-ci-dependencies-${{ hashFiles('**/poetry.lock') }}
-      - name: Install
-        run: poetry install --no-interaction --no-root
-        if: steps.poetry-cache.outputs.cache-hit != 'true'
+      - <: *common_steps
 
       - name: Run tests
         run: make test
