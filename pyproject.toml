@@ -4,7 +4,7 @@ packages = [
     { include = "pytomation" }
 ]
 name = "pytomation"
-version = "0.0.1"
+version = "0.0.3"
 description = "An advanced, fully hackable automation library written in Python"
 authors = ["Aran Moncusí Ramírez <aran@digitalpoet.info>"]
 readme = "README.md"
@@ -23,6 +23,9 @@ pytest = "8.3.2"
 [tool.poetry.group.dev]
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.8.0"
+
+[tool.poetry.scripts]
+pytomation = "pytomation.cli:run"
 
 [build-system]
 requires = ["poetry-core>=1.8.3"]
