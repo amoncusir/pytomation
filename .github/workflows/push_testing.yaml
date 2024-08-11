@@ -19,14 +19,14 @@ jobs:
       with:
         path: .venv
         key: poetry-ci-dependencies-${{ hashFiles('**/poetry.lock') }}
-
     - name: Install
       run: poetry install --no-interaction --no-root
       if: steps.poetry-cache.outputs.cache-hit != 'true'
+
   Lint:
     runs-on: ubuntu-latest
     steps:
-    - <: *common_steps
+    - *common_steps
 
     - name: SetUp pre-commit env from cache
       id: pre-commit-cache
@@ -41,7 +41,7 @@ jobs:
   Test:
     runs-on: ubuntu-latest
     steps:
-    - <: *common_steps
+    - *common_steps
 
     - name: Run tests
       run: make test
