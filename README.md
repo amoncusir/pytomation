@@ -47,7 +47,7 @@ Check repo:
 
 ### Set up
 
-1. Install python using pyenv (can omit this step in CI environments installing the right py version): `pyenv install`
+1. Install python using pyenv (could omit this step in CI environments installing the right py version): `pyenv install`
 2. Init poetry: `poetry install`
 3. Install pre-commit: `pre-commit install` (inside poetry virtual env)
 4. Run pre-commit: `pre-commit run --all-files`
