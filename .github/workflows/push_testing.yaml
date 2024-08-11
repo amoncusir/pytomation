@@ -1,7 +1,7 @@
 name: "Push actions"
 on: push
 jobs:
-  Run-Tests:
+  Lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -9,7 +9,7 @@ jobs:
         with:
           python-version-file: '.python-version'
       - name: Install poetry
-        run: pipx install poetry
+        run: pipx install poetry==1.8.3
       - name: Install dependencies from cache
         id: poetry-cache
         uses: actions/cache@v3
@@ -17,7 +17,30 @@ jobs:
           path: .venv
           key: poetry-ci-dependencies-${{ hashFiles('**/poetry.lock') }}
       - name: Install
-        run: poetry install --with test --no-interaction --no-root
+        run: poetry install --no-interaction --no-root
         if: steps.poetry-cache.outputs.cache-hit != 'true'
+
+      - name: Check Lint
+        run: make lint
+
+  Test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: '.python-version'
+      - name: Install poetry
+        run: pipx install poetry==1.8.3
+      - name: Install dependencies from cache
+        id: poetry-cache
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: poetry-ci-dependencies-${{ hashFiles('**/poetry.lock') }}
+      - name: Install
+        run: poetry install --no-interaction --no-root
+        if: steps.poetry-cache.outputs.cache-hit != 'true'
+
       - name: Run tests
-        run: poetry run pytest tests/
+        run: make test
