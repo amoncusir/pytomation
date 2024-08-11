@@ -1,0 +1,19 @@
+name: "Push actions"
+on: push
+jobs:
+  Run-Tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install poetry
+        run: pipx install poetry
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: '.python-version'
+          cache: 'poetry'
+      - name: Install
+        run: poetry install --with test
+      - name: Run CLI tests
+        run: pytest tests/cli/
+      - name: Run Project tests
+        run: pytest tests/projects/
