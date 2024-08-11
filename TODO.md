@@ -3,8 +3,8 @@
 
 # Release 0.1.0 - WIP #
 
-- [ ] Generic integration and fuzzy testing
+- [X] Generic integration and light testing
 - [X] Update CLI arguments to enable multiple commands in one call
 - [X] Add pre-commit actions to lint and format code
 - [X] Add verbose parameter
-- [ ] CI running tests
+- [X] CI running tests
