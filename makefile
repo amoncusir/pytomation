@@ -16,6 +16,12 @@ lint:
 test:
 	poetry run pytest $(TEST_DIR)
 
+publish-test:
+	poetry publish --build -r testpypi
+
+publish:
+	poetry publish --build
+
 info:
 	@echo "Project name: ${PROJECT_NAME}"
 	@echo "Project version: ${PROJECT_VERSION}"

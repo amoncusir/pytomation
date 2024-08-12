@@ -1,62 +1,13 @@
----
-name: "Push actions"
+name: Publish package to PyPip
 on:
   push:
-    branches-ignore:
-      - main
+    tags:
+    - '*'
+
 jobs:
-  Lint:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
-      with:
-        python-version-file: '.python-version'
-    - name: Install poetry
-      run: pipx install poetry==1.8.3
-    - name: Install dependencies from cache
-      id: poetry-cache
-      uses: actions/cache@v4
-      with:
-        path: .venv
-        key: poetry-ci-dependencies-${{ hashFiles('**/poetry.lock') }}
-    - name: Install
-      run: poetry install --no-interaction --no-root
-      if: steps.poetry-cache.outputs.cache-hit != 'true'
-
-    - name: SetUp pre-commit env from cache
-      id: pre-commit-cache
-      uses: actions/cache@v4
-      with:
-        path: ~/.cache/pre-commit
-        key: pre-commit=${{ hashFiles('.pre-commit-config.yaml') }}
-
-    - name: Check Lint
-      run: make lint
-
-  Test:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
-      with:
-        python-version-file: '.python-version'
-    - name: Install poetry
-      run: pipx install poetry==1.8.3
-    - name: Install dependencies from cache
-      id: poetry-cache
-      uses: actions/cache@v4
-      with:
-        path: .venv
-        key: poetry-ci-dependencies-${{ hashFiles('**/poetry.lock') }}
-    - name: Install
-      run: poetry install --no-interaction --no-root
-      if: steps.poetry-cache.outputs.cache-hit != 'true'
-
-    - name: Run tests
-      run: make test
 
   PublishOnTestPyPip:
+    if: ${{ startsWith(github.ref_name, 'dev') }}
     runs-on: ubuntu-latest
     environment: dev
     steps:
@@ -77,4 +28,28 @@ jobs:
       if: steps.poetry-cache.outputs.cache-hit != 'true'
 
     - name: Build
-      run: make build-test
+      run: make publish-test
+
+  PublishOnProductionPyPip:
+    if: ${{ startsWith(github.ref_name, 'v') }}
+    runs-on: ubuntu-latest
+    environment: release
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version-file: '.python-version'
+    - name: Install poetry
+      run: pipx install poetry==1.8.3
+    - name: Install dependencies from cache
+      id: poetry-cache
+      uses: actions/cache@v4
+      with:
+        path: .venv
+        key: poetry-ci-dependencies-${{ hashFiles('**/poetry.lock') }}
+    - name: Install
+      run: poetry install --no-interaction --no-root
+      if: steps.poetry-cache.outputs.cache-hit != 'true'
+
+    - name: Build
+      run: make publish
