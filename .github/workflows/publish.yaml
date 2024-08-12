@@ -1,0 +1,4 @@
+name: Publish package to PyPip
+on:
+- release
+jobs:
