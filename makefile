@@ -22,6 +22,19 @@ publish-test:
 publish:
 	poetry publish --build
 
+version:
+	@echo "Available rules: patch, minor, major, prepatch, preminor, premajor, prerelease"
+	@read -p "Specify the sem version rule: " rule; \
+	poetry version $$rule
+
+test-tag:
+	@echo "My version: $(shell poetry version)"
+	git tag "dev$(shell poetry version -s)"
+
+tag:
+	@echo "My version: $(shell poetry version)"
+	git tag -a "v$(shell poetry version -s)" -m
+
 info:
 	@echo "Project name: ${PROJECT_NAME}"
 	@echo "Project version: ${PROJECT_VERSION}"
