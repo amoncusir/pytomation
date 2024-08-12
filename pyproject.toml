@@ -27,6 +27,9 @@ pre-commit = "^3.8.0"
 [tool.poetry.scripts]
 pytomation = "pytomation.cli:run"
 
+[console_scripts]
+pytomation = "pytomation.cli:run"
+
 [build-system]
 requires = ["poetry-core>=1.8.3"]
 build-backend = "poetry.core.masonry.api"
