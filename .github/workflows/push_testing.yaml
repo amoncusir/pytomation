@@ -1,6 +1,9 @@
 ---
 name: "Push actions"
-on: push
+on:
+  push:
+    branches-ignore:
+      - main
 jobs:
   Lint:
     runs-on: ubuntu-latest
@@ -52,3 +55,26 @@ jobs:
 
     - name: Run tests
       run: make test
+
+  PublishOnTestPyPip:
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version-file: '.python-version'
+    - name: Install poetry
+      run: pipx install poetry==1.8.3
+    - name: Install dependencies from cache
+      id: poetry-cache
+      uses: actions/cache@v4
+      with:
+        path: .venv
+        key: poetry-ci-dependencies-${{ hashFiles('**/poetry.lock') }}
+    - name: Install
+      run: poetry install --no-interaction --no-root
+      if: steps.poetry-cache.outputs.cache-hit != 'true'
+
+    - name: Build
+      run: make build-test
