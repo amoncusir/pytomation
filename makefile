@@ -16,11 +16,8 @@ lint:
 test:
 	poetry run pytest $(TEST_DIR)
 
-publish-test:
-	poetry publish --build -r testpypi
-
-publish:
-	poetry publish --build
+build:
+	poetry build -n
 
 version:
 	@echo "Available rules: patch, minor, major, prepatch, preminor, premajor, prerelease"
