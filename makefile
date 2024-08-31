@@ -36,7 +36,7 @@ test-tag:
 
 tag:
 	@echo "My version: $(shell poetry version)"
-	git tag -a "v$(shell poetry version -s)" -m
+	git tag -a "v$(shell poetry version -s)"
 
 info:
 	@echo "Project name: ${PROJECT_NAME}"
