@@ -67,3 +67,38 @@ jobs:
         name: test-reports
         path: report/*
         overwrite: 'true'
+
+  TestVersion:
+    runs-on: ubuntu-latest
+    env:
+      INDEX: https://test.pypi.org/project/pytomation
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version-file: '.python-version'
+    - name: Install poetry
+      run: pipx install poetry==1.8.3
+    - name: Install dependencies from cache
+      id: poetry-cache
+      uses: actions/cache@v4
+      with:
+        path: .venv
+        key: poetry-ci-dependencies-${{ hashFiles('**/poetry.lock') }}
+
+    - name: Get Version
+      id: version
+      run: echo "VERSION=$(make get-version)" >> $GITHUB_ENV
+
+    - name: Get HTTP code from index
+      id: search
+      run: echo "CODE=$(curl -s -o /dev/null -w "%{http_code}" ${{ env.INDEX }}/${{ env.VERSION }}/)" >> $GITHUB_ENV
+
+    - name: Check if version exists on PyPI
+      run: |
+        if [ "$CODE" -ne 404 ]; then
+          echo "Error: Version already exists on PyPI (HTTP code: $CODE)."
+          exit 1
+        else
+          echo "Version does not exist on PyPI. Ready to publish."
+        fi
