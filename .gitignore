@@ -1,5 +1,5 @@
 # Ignore coverage report
-coverage-report.json
+report/
 
 ### Jetbrains
 
