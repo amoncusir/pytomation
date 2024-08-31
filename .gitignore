@@ -1,3 +1,6 @@
+# Ignore coverage report
+coverage-report.json
+
 ### Jetbrains
 
 .idea/
