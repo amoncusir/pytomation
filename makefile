@@ -30,10 +30,6 @@ version:
 get-version:
 	@poetry version -s
 
-test-tag:
-	@echo "My version: $(shell poetry version)"
-	git tag "dev$(shell poetry version -s)"
-
 tag:
 	@echo "My version: $(shell poetry version)"
 	git tag -a "v$(shell poetry version -s)"
