@@ -6,6 +6,10 @@ CHANGEME
 
 ## Decision
 
+### TITLE
+- CHANGEME
+
+#### Why?
 CHANGEME
 
 ## Consequences
