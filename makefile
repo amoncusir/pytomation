@@ -17,7 +17,7 @@ test:
 	poetry run pytest --cov=$(SOURCE_DIR) $(TEST_DIR)
 
 ci-test:
-	poetry run pytest --cov-report json:coverage-report.json --cov=$(SOURCE_DIR) $(TEST_DIR)
+	poetry run pytest --cov-report xml:report/coverage.xml --cov=$(SOURCE_DIR) --junit-xml=report/test.xml $(TEST_DIR)
 
 build:
 	poetry build -n
