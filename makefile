@@ -27,6 +27,9 @@ version:
 	@read -p "Specify the sem version rule: " rule; \
 	poetry version $$rule
 
+get-version:
+	@poetry version -s
+
 test-tag:
 	@echo "My version: $(shell poetry version)"
 	git tag "dev$(shell poetry version -s)"
