@@ -60,9 +60,10 @@ jobs:
     - name: Run tests
       run: make ci-test
 
-    - name: Upload test coverage report
+    - name: Upload test reports
       if: success()
       uses: actions/upload-artifact@v4
       with:
-        name: coverage-report
-        path: coverage-report.json
+        name: test-reports
+        path: report/*
+        overwrite: 'true'
