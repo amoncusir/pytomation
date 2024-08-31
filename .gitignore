@@ -1,3 +1,6 @@
+# Ignore coverage report
+report/
+
 ### Jetbrains
 
 .idea/

@@ -14,13 +14,13 @@ lint:
 	poetry run pre-commit run --all-files
 
 test:
-	poetry run pytest $(TEST_DIR)
+	poetry run pytest --cov=$(SOURCE_DIR) $(TEST_DIR)
 
-publish-test:
-	poetry publish --build -r testpypi
+ci-test:
+	poetry run pytest --cov-report xml:report/coverage.xml --cov=$(SOURCE_DIR) --junit-xml=report/test.xml $(TEST_DIR)
 
-publish:
-	poetry publish --build
+build:
+	poetry build -n
 
 version:
 	@echo "Available rules: patch, minor, major, prepatch, preminor, premajor, prerelease"
