@@ -25,15 +25,7 @@ jobs:
       run: poetry install --no-interaction --no-root
       if: steps.poetry-cache.outputs.cache-hit != 'true'
 
-    - name: Build cache
-      id: packages-cache
-      uses: actions/cache/restore@v4
-      with:
-        path: dist
-        key: packages-${{ github.sha }}
-
     - name: Build
-      if: steps.packages-cache.outputs.cache-hit != 'true'
       run: make build
 
     - name: Upload packages
