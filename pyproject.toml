@@ -4,7 +4,7 @@ packages = [
     { include = "pytomation" }
 ]
 name = "pytomation"
-version = "0.0.6"
+version = "0.0.7"
 description = "An advanced, fully hackable automation library written in Python"
 authors = ["Aran Moncusí Ramírez <aran@digitalpoet.info>"]
 readme = "README.md"

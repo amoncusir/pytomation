@@ -25,15 +25,7 @@ jobs:
       run: poetry install --no-interaction --no-root
       if: steps.poetry-cache.outputs.cache-hit != 'true'
 
-    - name: Build cache
-      id: packages-cache
-      uses: actions/cache/restore@v4
-      with:
-        path: dist
-        key: packages-${{ github.sha }}
-
     - name: Build
-      if: steps.packages-cache.outputs.cache-hit != 'true'
       run: make build
 
     - name: Upload packages
@@ -62,9 +54,7 @@ jobs:
         path: dist/
 
     - name: Publish distribution 📦 to PyPi
-      uses: pypa/gh-action-pypi-publish@release/v1
-      with:
-        repository-url: https://pypi.org/legacy/
+      uses: pypa/gh-action-pypi-publish@release/v1.10
 
   UploadToRelease:
     runs-on: ubuntu-latest
