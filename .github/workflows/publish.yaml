@@ -62,9 +62,7 @@ jobs:
         path: dist/
 
     - name: Publish distribution 📦 to PyPi
-      uses: pypa/gh-action-pypi-publish@release/v1
-      with:
-        repository-url: https://pypi.org/legacy/
+      uses: pypa/gh-action-pypi-publish@release/v1.10
 
   UploadToRelease:
     runs-on: ubuntu-latest
