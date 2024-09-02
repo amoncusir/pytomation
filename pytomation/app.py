@@ -1,7 +1,8 @@
 import logging
-from typing import TYPE_CHECKING, Any, Callable, Dict, List
+from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional
 
 from pytomation.action_inventory import ActionInventory
+from pytomation.configuration import Configuration
 from pytomation.context import Context
 from pytomation.errors import RunnerActionNotFoundError, RunnerModuleNotFoundError
 from pytomation.module_graph import ModuleGraphBuilder
@@ -15,6 +16,9 @@ if TYPE_CHECKING:
 
 # TODO: Useless principal app class. I can do it better...
 class App:
+    """
+    Deprecated class!
+    """
 
     discovery: "Discovery"
     profiles: List[str]
