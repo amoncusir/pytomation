@@ -32,9 +32,8 @@ class InitializerHandler:
 
     def __call__(self, *args, **kwargs):
 
-        last_chain = LastChain()
+        last_chain = _LastChain()
 
-        # sorted_chains = sorted(self.chains, key=lambda c: c.order)
         iter_chains = iter(sorted(self.chains, key=lambda c: c.order))
 
         def process_handler(context, handler: InitializationChain):
@@ -50,7 +49,7 @@ class InitializerHandler:
         return last_chain.context
 
 
-class LastChain(InitializationChain):
+class _LastChain(InitializationChain):
 
     context: ContextHandler
 
