@@ -66,7 +66,7 @@ class Module:
         return self._parent
 
     @property
-    def children(self) -> Optional[Tuple[Self]]:
+    def children(self) -> Tuple[Self, ...]:
         return tuple(self._children)
 
     def _add_child(self, child: Self) -> None:
