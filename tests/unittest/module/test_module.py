@@ -14,7 +14,7 @@ def build_action(name: str):
 
 
 def build_module(
-    name="module", docs="My Module docs!", path=Path("/test/module"), actions=None, parent=None, freeze=True
+    name="module", docs="My Module docs!", path=Path("/test/module"), actions=None, children=tuple(), freeze=True
 ) -> Module:
 
     if actions is None:
@@ -23,7 +23,7 @@ def build_module(
             build_action("useful_action"),
         ]
 
-    module = Module(name=name, docs=docs, path=path, actions=actions, parent=parent)
+    module = Module(name=name, docs=docs, path=path, actions=actions, children=children)
 
     if freeze:
         module.freeze()
@@ -77,11 +77,9 @@ def test_module_actions_magic_method_contains():
 
 
 def test_module_root():
-    root_module = build_module(name="root", freeze=False)
-    child_one_module = build_module(name="one", parent=root_module, freeze=False)
-    child_two_module = build_module(name="two", parent=child_one_module, freeze=False)
-
-    root_module.freeze()
+    child_two_module = build_module(name="two", freeze=False)
+    child_one_module = build_module(name="one", children=(child_two_module,), freeze=False)
+    root_module = build_module(name="root", children=(child_one_module,))
 
     assert root_module.root == root_module
     assert child_one_module.root == root_module
@@ -89,11 +87,9 @@ def test_module_root():
 
 
 def test_module_parent():
-    root_module = build_module(name="root", freeze=False)
-    child_one_module = build_module(name="one", parent=root_module, freeze=False)
-    child_two_module = build_module(name="two", parent=child_one_module, freeze=False)
-
-    root_module.freeze()
+    child_two_module = build_module(name="two", freeze=False)
+    child_one_module = build_module(name="one", children=(child_two_module,), freeze=False)
+    root_module = build_module(name="root", children=(child_one_module,))
 
     assert root_module.parent is None
     assert child_one_module.parent == root_module
@@ -101,24 +97,20 @@ def test_module_parent():
 
 
 def test_module_parent_immutability():
-    root_module = build_module(name="root", freeze=False)
-    child_one_module = build_module(name="one", parent=root_module, freeze=False)
-    child_two_module = build_module(name="two", parent=child_one_module, freeze=False)
-
-    root_module.freeze()
+    child_two_module = build_module(name="two", freeze=False)
+    child_one_module = build_module(name="one", children=(child_two_module,), freeze=False)
+    root_module = build_module(name="root", children=(child_one_module,))
 
     with pytest.raises(ImmutableChangeError):
-        child_two_module._add_parent(root_module)
+        root_module._add_child(child_two_module)
 
 
 def test_module_children():
-    root_module = build_module(name="root", freeze=False)
-    child_one_one_module = build_module(name="one_one", parent=root_module, freeze=False)
-    child_one_two_module = build_module(name="one_two", parent=root_module, freeze=False)
-    child_two_one_module = build_module(name="two_one", parent=child_one_one_module, freeze=False)
-
-    root_module.freeze()
+    child_two_one_module = build_module(name="two_one", freeze=False)
+    child_one_two_module = build_module(name="one_two", freeze=False)
+    child_one_one_module = build_module(name="one_one", children=(child_two_one_module,), freeze=False)
+    root_module = build_module(name="root", children=(child_one_one_module, child_one_two_module))
 
     assert root_module.children == (child_one_one_module, child_one_two_module)
     assert child_one_one_module.children == (child_two_one_module,)
-    assert child_two_one_module.children is None
+    assert child_two_one_module.children == tuple()
