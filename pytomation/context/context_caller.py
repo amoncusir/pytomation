@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import NewType, Tuple
+from typing import Tuple
 
 from pytomation.module import Module
 from pytomation.module.action import Action
