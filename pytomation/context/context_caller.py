@@ -38,8 +38,8 @@ class ContextCaller:
         raise ValueError
 
     def __getitem__(self, item: ItemArg) -> Tuple[str, ...]:
-        index = self.argument_index(item)
-        iterable = iter(self.arguments[index + 1 :])
+        index = self.argument_index(item) + 1
+        iterable = iter(self.arguments[index:])
         values = []
 
         for value in iterable:
