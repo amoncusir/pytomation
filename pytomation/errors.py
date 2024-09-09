@@ -1,7 +1,19 @@
-from pytomation.action import TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from pytomation.module import Module
+
+
+class ImmutableChangeError(Exception):
+    pass
+
+
+class InitError(Exception):
+    pass
+
+
+class InvalidStateError(InitError):
+    pass
 
 
 class RunnerError(Exception):
