@@ -1,16 +1,3 @@
-from pathlib import Path
-
-# from pytomation import cli
-# from pytomation.cli.arguments import Options
-#
-#
-# def main_cli(*args: str):
-#     path = Path(__file__).parent.resolve()
-#     options = Options(_cwd=path, module_name="pytomation_module.py", verbosity=5)
-#
-#     cli.main(args, options)
-
-
 def test_root_module(capsys, cli):
 
     cli(":root")
