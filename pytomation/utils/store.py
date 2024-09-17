@@ -1,4 +1,4 @@
-from typing import Any, Dict, Generic, Type, TypeVar
+from typing import Dict, Type, TypeVar
 
 ValueType = TypeVar("ValueType")
 

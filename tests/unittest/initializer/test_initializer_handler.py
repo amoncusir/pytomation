@@ -3,7 +3,6 @@ from typing import NewType, Type
 
 import pytest
 
-# from pytomation.initializer.context import ContextHandler
 from pytomation.initializer.initializer import InitializationChain, InitializerHandler
 from pytomation.utils.store import TypedStore
 
