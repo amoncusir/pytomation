@@ -2,7 +2,7 @@ from abc import abstractmethod
 from functools import partial
 from typing import Callable, List
 
-from pytomation.initializer.context import ContextHandler
+from pytomation.utils.store import TypedStore
 
 
 class InitializationChain:
@@ -13,7 +13,7 @@ class InitializationChain:
         self.order = order
 
     @abstractmethod
-    def handle(self, next_handler: Callable[[ContextHandler], None], context: ContextHandler):
+    def handle(self, next_handler: Callable[[TypedStore], None], context: TypedStore):
         raise NotImplementedError("Implement this method")
 
 
@@ -44,14 +44,14 @@ class InitializerHandler:
 
             handler.handle(next_handler, context)
 
-        process_handler(ContextHandler(), next(iter_chains, None))
+        process_handler(TypedStore(), next(iter_chains, None))
 
         return last_chain.context
 
 
 class _LastChain(InitializationChain):
 
-    context: ContextHandler
+    context: TypedStore
 
-    def handle(self, _: None, context: ContextHandler):
+    def handle(self, _: None, context: TypedStore):
         self.context = context

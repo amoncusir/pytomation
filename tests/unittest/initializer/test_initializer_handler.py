@@ -3,8 +3,9 @@ from typing import NewType, Type
 
 import pytest
 
-from pytomation.initializer.context import ContextHandler
+# from pytomation.initializer.context import ContextHandler
 from pytomation.initializer.initializer import InitializationChain, InitializerHandler
+from pytomation.utils.store import TypedStore
 
 
 class SetObjectChain(InitializationChain):
@@ -14,7 +15,7 @@ class SetObjectChain(InitializationChain):
 
         self.value = value
 
-    def handle(self, next_handler, context: ContextHandler):
+    def handle(self, next_handler, context: TypedStore):
         context.put(self.value)
 
         next_handler(context)
@@ -40,7 +41,7 @@ def test_initializer_share_objects_between_chains():
 
     class DoubleNumberChain(InitializationChain):
 
-        def handle(self, next_handler, context: ContextHandler):
+        def handle(self, next_handler, context: TypedStore):
 
             number = context.get(int)
             context.put(number * 2, type_value=int)
@@ -70,7 +71,7 @@ def test_initializer_order_of_chains():
             super().__init__(order)
             self.time_type = time_type
 
-        def handle(self, next_handler, context: ContextHandler):
+        def handle(self, next_handler, context: TypedStore):
             context.put(time(), type_value=self.time_type)
             next_handler(context)
 
@@ -98,8 +99,8 @@ def test_initializer_change_context():
 
     class FreshContextChain(InitializationChain):
 
-        def handle(self, next_handler, context: ContextHandler):
-            next_handler(ContextHandler())
+        def handle(self, next_handler, context: TypedStore):
+            next_handler(TypedStore())
 
     init = InitializerHandler()
 
@@ -108,14 +109,14 @@ def test_initializer_change_context():
 
     result = init()
 
-    assert result.store == {}
+    assert result._store == {}
 
 
 def test_initializer_raise_error():
 
     class RaiseErrorChain(InitializationChain):
 
-        def handle(self, next_handler, context: ContextHandler):
+        def handle(self, next_handler, context: TypedStore):
             raise Exception("Chain Exception")
 
     init = InitializerHandler()
@@ -133,7 +134,7 @@ def test_initializer_stop_chain():
 
     class StopChain(InitializationChain):
 
-        def handle(self, next_handler, context: ContextHandler):
+        def handle(self, next_handler, context: TypedStore):
             pass
 
     init = InitializerHandler()
