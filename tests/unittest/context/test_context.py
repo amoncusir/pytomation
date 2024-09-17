@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Callable, Tuple
 
 from pytomation.context import Context
@@ -21,7 +22,7 @@ def test_context_caller():
     assert caller.arguments is Tuple[str, ...]
 
 
-def test_context_action_log():
+def test_context_action_handler():
     context = build_context()
 
     handler = context.action_handler
@@ -48,3 +49,23 @@ def test_context_store():
 
     assert store is not None
     assert store is TypedStore
+
+
+def test_context_current_path():
+
+    context = build_context()
+
+    path = context.current_path
+
+    assert path is not None
+    assert path is Path("/test/module/current")
+
+
+def test_context_main_path():
+
+    context = build_context()
+
+    path = context.main_path
+
+    assert path is not None
+    assert path is Path("/test/module/main")
