@@ -24,49 +24,11 @@ help other tasks. The `InitializerContext` will be used for, defining methods an
 #### Why?
 
 The initialization process requires many agents to perform it. Most of them, requires previously another processes to
-be able to run, then needs other processes before.  
-
-#### How?
-
-Each Chain can decide if next step can be executed calling them self, also can add additional objects to the init
-process.
-
-```mermaid
----
-title: Initializer Process 
----
-stateDiagram-v2
-    
-    state "Instance Initializer" as instance
-    state "Instance Chains" as chains
-    state "Add chains to Initializer" as add_chains
-    state "Execute Chains" as run
-    state "Build Application" as build
-    state "Throw Error" as fail
-    
-    state chain_run_next <<choice>>
-    
-%%    Flow
-    
-    [*] --> instance
-    
-    chains --> add_chains
-    instance --> add_chains
-    
-    add_chains --> run
-    
-    run --> chain_run_next
-    
-    chain_run_next --> run: Is Successfully and have more
-    chain_run_next --> build: All Chains executed
-    chain_run_next --> fail: Is Not Successfully 
-    
-    build --> [*]
-    fail
-
-
-```
+be able to run, then needs other processes before. Also, enables an upgradable system to made changes when it needs.  
 
 ## Consequences
 
-- 
+- Create tests to focus on contract and working method
+- Create an `InitializerHandler` to manage the process
+- Create interfaces and context 
+- Integrate other components to the new build system. This includes a complete refactor.
