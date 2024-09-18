@@ -30,7 +30,7 @@ class InitializerHandler:
     def add(self, chain: InitializationChain):
         self.chains.append(chain)
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self):
 
         last_chain = _LastChain()
 
