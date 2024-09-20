@@ -2,7 +2,7 @@ from abc import abstractmethod
 from functools import partial
 from typing import Any, Callable, Iterable, Optional, TypeVar
 
-from tests.unittest.utils import pass_fn
+from pytomation.utils import pass_fn
 
 ChainFn = TypeVar("ChainFn", bound=Callable[[Callable[[Any], None], Any], None])
 ChainContext = TypeVar("ChainContext", bound=Any)
