@@ -24,8 +24,6 @@ def test_replacement_factory_build():
     assert new_config.module_name == "new_module.py"
     assert new_config.verbosity == 2
     assert new_config.module_path_splitter == initial_config.module_path_splitter
-    assert new_config.call_path == initial_config.call_path
-    assert new_config.project_path == initial_config.project_path
 
 
 def test_replacement_factory_ignore_type():
@@ -54,8 +52,6 @@ def test_replacement_factory_all_ignore_type():
 
     assert new_config.module_name == initial_config.module_name
     assert new_config.module_path_splitter == initial_config.module_path_splitter
-    assert new_config.call_path == initial_config.call_path
-    assert new_config.project_path == initial_config.project_path
     assert new_config.verbosity == initial_config.verbosity
 
 
@@ -64,8 +60,6 @@ def test_replacement_factory_multiple_replacements():
     replacement = [
         ("module_name", "new_module.py"),
         ("module_path_splitter", "-"),
-        ("call_path", Path("/new/call/path")),
-        ("project_path", Path("/new/project/path")),
         ("verbosity", 10),
     ]
     factory = ReplacementFactory(replacement)
@@ -74,8 +68,6 @@ def test_replacement_factory_multiple_replacements():
 
     assert new_config.module_name == "new_module.py"
     assert new_config.module_path_splitter == "-"
-    assert new_config.call_path == Path("/new/call/path")
-    assert new_config.project_path == Path("/new/project/path")
     assert new_config.verbosity == 10
 
 
@@ -88,6 +80,4 @@ def test_replacement_factory_empty_replacement():
 
     assert new_config.module_name == initial_config.module_name
     assert new_config.module_path_splitter == initial_config.module_path_splitter
-    assert new_config.call_path == initial_config.call_path
-    assert new_config.project_path == initial_config.project_path
     assert new_config.verbosity == initial_config.verbosity
