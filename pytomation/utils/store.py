@@ -19,8 +19,8 @@ class TypedStore:
 
         self._store[type_value] = value
 
-    def get(self, type_value: Type[ValueType]) -> ValueType:
-        return self._store.get(type_value)
+    def get(self, type_value: Type[ValueType], default=None) -> ValueType:
+        return self._store.get(type_value, default)
 
     def delete(self, type_value: Type[ValueType]):
         del self._store[type_value]
