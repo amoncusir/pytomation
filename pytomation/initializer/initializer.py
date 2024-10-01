@@ -13,7 +13,7 @@ class InitializationChain(Chain):
         self.order = order
 
     @abstractmethod
-    def process(self, next_handler: Callable[[TypedStore], None], context: TypedStore):
+    def process(self, next_handler: Callable[[TypedStore], TypedStore], context: TypedStore) -> TypedStore:
         raise NotImplementedError("Implement this method")
 
 
