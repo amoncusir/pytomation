@@ -1,3 +1,5 @@
-from typing import TypeVar
+from pathlib import Path
+from typing import List, NewType
 
-RootPath = TypeVar("RootPath", bound=str)
+RootPath = NewType("RootPath", Path)
+ModulesPath = NewType("ModulesPath", List[Path])
