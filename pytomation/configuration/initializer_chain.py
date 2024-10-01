@@ -18,7 +18,7 @@ class ConfigurationInitializerChain(InitializationChain):
         self.initial_configuration = initial_configuration
         self.factories = factories
 
-    def handle(self, next_handler: Callable[[TypedStore], None], context: TypedStore):
+    def process(self, next_handler: Callable[[TypedStore], None], context: TypedStore):
         config = self._build_by_factories()
 
         context.put(config)
