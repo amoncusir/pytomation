@@ -9,7 +9,7 @@ from pytomation.utils.store import TypedStore
 
 class RootPathStrategy(Chain):
 
-    def process(self, next_chain: Callable[[TypedStore], None], context: TypedStore) -> Path:
+    def process(self, next_chain: Callable[[TypedStore], Path], context: TypedStore) -> Path:
         raise NotImplementedError("Implement this method")
 
 
@@ -38,7 +38,7 @@ class FileFindRootPath(RootPathStrategy):
     def __init__(self, file_name: str):
         self.file_name = file_name
 
-    def process(self, next_chain: Callable[[TypedStore], None], context: TypedStore):
+    def process(self, next_chain: Callable[[TypedStore], Path], context: TypedStore):
         current_path = Path.cwd()
         back_paths = (current_path, *list(current_path.parents))
 
@@ -46,7 +46,7 @@ class FileFindRootPath(RootPathStrategy):
             if self._contains_file(path):
                 return path
 
-        next_chain(context)
+        return next_chain(context)
 
     def _contains_file(self, pth: Path) -> bool:
         current_file = pth / self.file_name
