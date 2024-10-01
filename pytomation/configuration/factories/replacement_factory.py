@@ -1,10 +1,10 @@
 from pathlib import Path
-from typing import Any, Iterable, Tuple, Type, TypeVar
+from typing import Any, Iterable, NewType, Tuple, Type
 
 from pytomation.configuration import Configuration
 from pytomation.configuration.factory import ConfigurationFactory
 
-IgnoreType = TypeVar("IgnoreType")
+IgnoreType = NewType("IgnoreType", Any)
 
 
 class ConfigurationReplacement:
