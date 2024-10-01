@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Callable, Tuple
+from typing import Callable, Tuple
 
 from pytomation.initializer.initializer import InitializationChain
 from pytomation.initializer.types import RootPath
