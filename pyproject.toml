@@ -16,6 +16,8 @@ requires-python = ">=3.12"
 [tool.poetry.dependencies]
 python = "^3.12"
 gitpython = "^3.1.43"
+pydantic = "^2.9.2"
+pydantic-settings = "^2.6.0"
 
 [tool.poetry.group.test]
 [tool.poetry.group.test.dependencies]
@@ -25,7 +27,7 @@ hypothesis = "^6.112.1"
 
 [tool.poetry.group.dev]
 [tool.poetry.group.dev.dependencies]
-pre-commit = "^3.8.0"
+pre-commit = "^4.0.1"
 
 [tool.poetry.scripts]
 pytomation = "pytomation.cli:run"
