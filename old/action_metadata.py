@@ -1,7 +1,7 @@
 import functools
 import logging
 
-from pytomation.action_wrapper.util import safe_call
+from old.action_wrapper.util import safe_call
 
 
 def action():

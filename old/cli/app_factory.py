@@ -1,8 +1,8 @@
 import logging
 from argparse import Namespace
 
-from pytomation.app import App
-from pytomation.discovery.file_discover import FileDiscovery
+from old.app import App
+from old.discovery import FileDiscovery
 
 
 def build_from_args(args: Namespace) -> App:

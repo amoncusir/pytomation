@@ -6,10 +6,10 @@ from os import PathLike
 from pathlib import Path
 from typing import Callable, Sequence
 
-from pytomation.app import App
-from pytomation.cli.action_command import initialize
-from pytomation.cli.app_factory import build_from_args
-from pytomation.cli.verify_command import verify_modules
+from old.app import App
+from old.cli.action_command import initialize
+from old.cli.app_factory import build_from_args
+from old.cli.verify_command import verify_modules
 
 
 @dataclass(frozen=True)

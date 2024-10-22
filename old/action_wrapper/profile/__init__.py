@@ -1,7 +1,7 @@
 import functools
 from typing import TYPE_CHECKING, List
 
-from pytomation.action_wrapper.util import get_from_context, safe_call
+from old.action_wrapper.util import get_from_context, safe_call
 
 if TYPE_CHECKING:
     from pytomation.profile import Profile

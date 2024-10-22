@@ -5,7 +5,7 @@ from os import PathLike
 from pathlib import Path
 from typing import TYPE_CHECKING, List
 
-from pytomation.discovery import Discovery
+from old.discovery import Discovery
 from pytomation.module import SourceFileModule
 
 if TYPE_CHECKING:

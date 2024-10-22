@@ -1,16 +1,15 @@
 import logging
-from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional
+from typing import TYPE_CHECKING, Any, Callable, Dict, List
 
-from pytomation.action_inventory import ActionInventory
-from pytomation.configuration import Configuration
+from old.action_inventory import ActionInventory
+from old.module_graph import ModuleGraphBuilder
 from pytomation.context import Context
 from pytomation.errors import RunnerActionNotFoundError, RunnerModuleNotFoundError
-from pytomation.module_graph import ModuleGraphBuilder
 from pytomation.plugin import Plugin
 from pytomation.profile import Profile
 
 if TYPE_CHECKING:
-    from pytomation.discovery import Discovery
+    from old.discovery import Discovery
     from pytomation.module import Module
 
 
@@ -104,7 +103,7 @@ class App:
             logging.error(f"Module <{path}> is not defined")
             raise RunnerModuleNotFoundError(path)
 
-        if not module.is_executed:
+        if not module.is_loaded:
             logging.debug(f"Loading module <{module.name}>")
             module.load()
 

@@ -2,7 +2,7 @@ import argparse
 import logging
 from typing import List, Tuple
 
-from pytomation.app import App
+from old.app import App
 from pytomation.errors import RunnerActionNotFoundError
 from pytomation.module import Module
 
