@@ -4,6 +4,8 @@ from dataclasses import dataclass
 from inspect import Signature
 from typing import Any, Optional, Type
 
+from pytomation.utils.store import TypedStore
+
 
 @dataclass(frozen=True)
 class ActionResult:
@@ -16,27 +18,22 @@ class ActionResult:
 class Action:
 
     def __init__(self):
-        self._logger = logging.getLogger(self.__class__.__name__)
+        self._logger = logging.getLogger(self.__class__.__qualname__)
 
     @property
     @abstractmethod
-    def name(self) -> str:
-        raise NotImplementedError
+    def name(self) -> str: ...
 
     @property
     @abstractmethod
-    def docs(self) -> str:
-        raise NotImplementedError
+    def docs(self) -> str: ...
 
     @property
     @abstractmethod
-    def signature(self) -> Signature:
-        raise NotImplementedError
+    def signature(self) -> Signature: ...
 
     @abstractmethod
-    def run(self, *args, **kwargs) -> ActionResult:
-        raise NotImplementedError
+    def run(self, *args, **kwargs) -> ActionResult: ...
 
     @abstractmethod
-    def get_metadata(self, mtd_type: Type) -> Any:
-        raise NotImplementedError
+    def metadata(self) -> TypedStore: ...

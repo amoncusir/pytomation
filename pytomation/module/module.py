@@ -1,101 +1,84 @@
 import functools
 from pathlib import Path
-from typing import Callable, Dict, Iterable, List, Optional, Self, Tuple
+from typing import Dict, List, Optional, Self
 
-from pytomation.errors import ImmutableChangeError
-from pytomation.module.action import Action
+from pytomation.action import Action
+from pytomation.module.loader import ModuleLoader
+from pytomation.module.metadata import MetadataModule
+from pytomation.utils.graph import ReverseTree
 
 
-class Module:
+class Module(ReverseTree[Self]):
+    """
+    Facade class that contains all the logic
+    """
 
-    _name: str
-    _docs: str
-    _path: Path
+    _loader: ModuleLoader
     _actions: Dict[str, Action]
-    _parent: Optional[Self]
-    _children: List[Self]
-    _freeze: bool = False
+    _metadata: MetadataModule
 
-    def __init__(
-        self,
-        name: str,
-        docs: str,
-        path: Path,
-        actions: List[Action],
-        children: Optional[Iterable[Self]] = tuple(),
-    ):
+    def __init__(self, loader: ModuleLoader):
+        if loader is None:
+            raise ValueError("Loader cannot be None")
 
-        self._name = name
-        self._docs = docs
-        self._path = path
-        self._actions = {a.name: a for a in actions}
+        super().__init__()
 
-        self._parent = None
-        self._children = []
-
-        for child in children:
-            self._add_child(child)
+        self._loader = loader
+        self._metadata = self._loader.metadata
 
     @property
-    def name(self) -> str:
-        return self._name
+    def qualified_name(self) -> str:
+        return self._metadata.qualified_name
 
     @property
-    def docs(self) -> str:
-        return self._docs
+    def docs(self) -> Optional[str]:
+        if not self.is_loaded:
+            self.load()
+
+        return self._metadata.docs
 
     @property
-    def path(self) -> Path:
-        return self._path
+    def module_path(self) -> Optional[Path]:
+        return self._metadata.module_path
+
+    @property
+    def dir_path(self) -> Optional[Path]:
+        return self._metadata.dir_path
+
+    @property
+    def is_loaded(self) -> bool:
+        return self._loader.is_loaded
 
     @functools.cached_property
     def actions(self) -> List[Action]:
+        if not self.is_loaded:
+            self.load()
+
         return list(self._actions.values())
 
-    @property
-    def root(self) -> Self:
-        parent = self.parent
-
-        if parent is None:
-            return self
-
-        return parent.root
-
-    @property
-    def parent(self) -> Optional[Self]:
-        return self._parent
-
-    @property
-    def children(self) -> Tuple[Self, ...]:
-        return tuple(self._children)
-
-    def _add_child(self, child: Self) -> None:
-        if self._freeze or child._freeze:
-            raise ImmutableChangeError()
-
-        child._parent = self
-
-        if self._children is None:
-            self._children = [child]
-        else:
-            self._children.append(child)
-
     def __getitem__(self, item):
+        if not self.is_loaded:
+            self.load()
+
         return self._actions[item]
 
     def __contains__(self, item):
+        if not self.is_loaded:
+            self.load()
+
         return item in self._actions.keys()
 
-    def propagate_children_function(self, fn: Callable[[Self], None]):
+    def load(self):
+        if self.parent is not None:
+            self.parent.load()
 
-        fn(self)
+        self._load()
 
-        if self.children is not None:
-            for child in self.children:
-                child.propagate_children_function(fn)
+    def _load(self):
+        if not self.is_loaded:
+            self._loader.load()
+        else:
+            self._loader.reload()
 
-    def freeze(self):
-        def freeze_fn(mod):
-            mod._freeze = True
-
-        self.propagate_children_function(freeze_fn)
+        self._metadata = self._loader.metadata
+        self._actions = {a.name: a for a in self._loader.actions}

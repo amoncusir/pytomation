@@ -31,7 +31,7 @@ class RootPathFinder(InitializationChain):
         return next_handler(context)
 
 
-class FileFindRootPath(RootPathStrategy):
+class SearchFileRootPath(RootPathStrategy):
 
     file_name: str
 

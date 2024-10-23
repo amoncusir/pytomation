@@ -1,12 +1,12 @@
 from abc import abstractmethod
 from functools import partial
-from typing import Any, Callable, Iterable, Optional, TypeVar
+from typing import Any, Callable, Iterable, Optional, Protocol, TypeVar
 
 ChainFn = TypeVar("ChainFn", bound=Callable[[Callable[[Any], Any], Any], Any])
 ChainContext = TypeVar("ChainContext", bound=Any)
 
 
-class Chain:
+class Chain(Protocol):
 
     @abstractmethod
     def process(self, next_chain: Callable[[ChainContext], Any], context: ChainContext) -> Any:
@@ -20,9 +20,15 @@ def chain_process(chains: Iterable[ChainFn], initial_ctx: Optional[ChainContext]
 
     iter_chains = iter(chains)
 
+    def last_chain(context: ChainContext) -> ChainContext:
+        return context
+
     def handler(context: ChainContext, chain: ChainFn):
-        next_chain = next(iter_chains, lambda _, x: x)
-        next_handler = partial(handler, chain=next_chain)
+        next_chain = next(iter_chains, None)
+        if next_chain is None:
+            next_handler = last_chain
+        else:
+            next_handler = partial(handler, chain=next_chain)
 
         return chain(next_handler, context)
 

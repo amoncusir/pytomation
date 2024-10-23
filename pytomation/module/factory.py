@@ -1,13 +1,31 @@
+import logging
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Dict
+from pathlib import Path
+from typing import TYPE_CHECKING
+
+from pytomation.module import Module
 
 if TYPE_CHECKING:
-    from pytomation.configuration import Configuration
-    from pytomation.module import Module
+    pass
 
 
-class ModulesFactory:
+class ModuleFactory:
 
     @abstractmethod
-    def build(self, configuration: Configuration) -> Dict[str, Module]:
+    def build(self, root_path: Path, module_path: Path) -> Module:
+        raise NotImplementedError
+
+
+class PythonModuleFactory(ModuleFactory):
+
+    def __init__(self):
+        self.logger = logging.getLogger(self.__class__.__qualname__)
+
+    def build(self, root_path: Path, module_path: Path) -> Module:
         pass
+
+    def get_module_name(self, root_path: Path, module_path: Path) -> str:
+        if root_path == module_path:
+            return ""
+
+        return module_path.parent.name

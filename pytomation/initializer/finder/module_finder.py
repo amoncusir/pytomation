@@ -1,6 +1,6 @@
 import logging
 from pathlib import Path
-from typing import Callable
+from typing import Callable, List
 
 from pytomation.configuration import Configuration
 from pytomation.initializer.initializer import InitializationChain
@@ -26,7 +26,7 @@ class ModuleFinderChain(InitializationChain):
 
         return next_handler(context)
 
-    def find_modules(self, workdir: Path, module_name: str):
+    def find_modules(self, workdir: Path, module_name: str) -> List[Path]:
 
         self.logger.debug(f"Searching all modules in {workdir} like {module_name}")
 

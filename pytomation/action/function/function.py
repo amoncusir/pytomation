@@ -1,9 +1,12 @@
 import functools
 import inspect
 from inspect import Signature
-from typing import Any, Callable, Dict, Type
+from typing import Callable
 
-from pytomation.module.action.contract import Action, ActionResult
+from pytomation.action.contract import Action, ActionResult
+from pytomation.action.function.metadata import get_metadata
+from pytomation.action.function.wrapper.action import ActionMetadata
+from pytomation.utils.store import TypedStore
 
 
 class FunctionAction(Action):
@@ -14,9 +17,13 @@ class FunctionAction(Action):
         super().__init__()
         self._function = function
 
+    @property
+    def action_metadata(self) -> ActionMetadata:
+        return self.metadata[ActionMetadata]
+
     @functools.cached_property
     def name(self) -> str:
-        return self._function.__name__
+        return self.action_metadata.name or self._function.__name__
 
     @functools.cached_property
     def docs(self) -> str:
@@ -27,17 +34,8 @@ class FunctionAction(Action):
         return inspect.signature(self._function)
 
     @functools.cached_property
-    def metadata(self) -> Dict[Type, Any]:
-        # noinspection PyUnresolvedReferences
-        return self._function.__pytomation__
-
-    def get_metadata(self, mtd_type: Type = None) -> Any:
-        metadata = self.metadata
-
-        if mtd_type is None:
-            return metadata
-
-        return metadata[mtd_type]
+    def metadata(self) -> TypedStore:
+        return get_metadata(self._function)
 
     def run(self, *args, **kwargs) -> ActionResult:
 

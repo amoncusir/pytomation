@@ -1,10 +1,8 @@
-import dataclasses
-from dataclasses import dataclass, field
-from typing import Self
+from pydantic import BaseModel, ConfigDict, Field
 
 
-@dataclass(frozen=True)
-class Configuration:
+class Configuration(BaseModel):
+    model_config = ConfigDict(frozen=True)
     """
     Contains properties relevant to the **execution process**.
     Like the verbosity level, the parallelization factor, the name of the modules, the module splitter (needed if
@@ -15,9 +13,6 @@ class Configuration:
     The current values bay becomes from different inputs and be merged with them.
     """
 
-    module_name: str = field(default="pytomation.py")
-    module_path_splitter: str = field(default="/")
-    verbosity: int = field(default=0)
-
-    def copy(self, **changes) -> Self:
-        return dataclasses.replace(self, **changes)
+    module_name: str = Field(default="pytomation.py")
+    module_path_splitter: str = Field(default="/")
+    verbosity: int = Field(default=0)

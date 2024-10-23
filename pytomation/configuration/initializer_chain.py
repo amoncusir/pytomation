@@ -12,7 +12,7 @@ class ConfigurationInitializerChain(InitializationChain):
     initial_configuration: Configuration
 
     def __init__(
-        self, initial_configuration: Configuration, factories: Tuple[ConfigurationFactory, ...], order: int = 0
+        self, initial_configuration: Configuration, factories: Tuple[ConfigurationFactory, ...] = None, order: int = 0
     ):
         super().__init__(order)
         self.initial_configuration = initial_configuration
@@ -23,13 +23,13 @@ class ConfigurationInitializerChain(InitializationChain):
 
         context.put(config)
 
-        next_handler(context)
+        return next_handler(context)
 
     def _build_by_factories(self) -> Configuration:
 
         config = self.initial_configuration
 
-        for factory in self.factories:
+        for factory in self.factories or []:
             config = factory.build(config)
 
         return config
